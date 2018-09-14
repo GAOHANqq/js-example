@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            .box{
+                width:500px;
+                height:300px;
+                border:1px solid #ccc;
+                padding:10px;
+                box-sizing:border-box;
+            }
+            .write{
+                margin-top:50px;
+            }
+            textarea{
+                width:500px;
+                height:94px;
+                box-sizing:border-box;
+            }
+        </style>
+        <script type="text/javascript" src="js/jquery-2.1.0.js" ></script>
+    </head>
+    <body>
+        <div>
+            <h2>评论区</h2>
+            <div class="box">
+                <!--<p>我是评论内容1</p>-->
+            </div>
+        </div>
+        <div class="write">
+            <textarea id="textblock"></textarea>
+            <button class="submit">提交内容</button>
+        </div>
+        <script>
+            $(function(){
+                var arr = [];
+                function writecon(){
+                    var str = '';
+                    for(var i=0; i<arr.length; i++){
+                        str += "<p>" + arr[i] + "</p>";
+                    }
+                    $(".box").append(str);
+                };
+                writecon();
+                $(".submit").click(function(){
+                    var textblock = $("#textblock").val()
+                    if(textblock){
+                        arr.push(textblock);
+                        var str = "<p>" + textblock + "</p>"
+                        $(".box").append(str);
+                        $("#textblock").val("");
+                        console.log(arr)
+                    }else{
+                        alert("请输入内容");
+                    }
+                });
+            })
+        </script>
+    </body>
+</html>

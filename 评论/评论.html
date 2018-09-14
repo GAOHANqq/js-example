@@ -1,0 +1,179 @@
+<!--
+	作者：向超
+	时间：2018-01-16
+	描述：主要通过JS创建标签并添加样式，
+		   创建一个简单的评论专区模块。。。。待后续更新功能
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>发布微博</title>
+		<script type="text/javascript">
+			window.onload = function() {
+				var input011 = document.getElementsByClassName("input011")[0]
+				input011.onclick = function(){
+					//找到灰色模块，让其可见
+					var div03 = document.getElementsByClassName("div03")[0]
+					div03.style.zIndex="1"
+					div03.style.opacity="0.2"
+					div03.style.background="black"
+					div03.style.display="block"
+					//创建弹出框，并设置其堆叠顺序放于最外层
+					var divchild01 = document.createElement("div")
+					divchild01.style.width="600px"
+					divchild01.style.height="400px"
+					divchild01.style.background="pink"
+					divchild01.style.position="fixed"
+					divchild01.style.top="150px"
+					divchild01.style.left="410px"
+					divchild01.style.zIndex="2"
+					//把弹出框添加至body
+					document.body.appendChild(divchild01)
+					//创建发表微博文字栏的div小模块
+					var divchild02 = document.createElement("div")
+					divchild02.style.width="600px"
+					divchild02.style.height="80px"
+					divchild02.style.background="#00008B"
+					divchild01.appendChild(divchild02)
+					var divchild03 = document.createElement("div")
+					divchild03.style.width="600px"
+					divchild03.style.height="320px"
+					divchild03.style.background="white"
+					divchild01.appendChild(divchild03)
+					//创建span，添加发表微博文字
+					var span01 = document.createElement("span")
+					span01.innerHTML="发布微博"
+					span01.style.color="white"
+					span01.style.height="80px"
+					span01.style.width="400px"
+					span01.style.textAlign="center"
+					span01.style.fontSize="1.6em"
+					span01.style.float="left"
+					span01.style.marginTop="22px"
+					span01.style.marginLeft="100px"
+					divchild02.appendChild(span01)
+					//创建span，添加X当做叉，亦可插入图片
+					var span02 = document.createElement("span")
+					span02.innerHTML="X"
+					span02.style.color="white"
+					span02.style.height="80px"
+					span02.style.width="20px"
+					span02.style.textAlign="center"
+					span02.style.fontSize="1.6em"
+					span02.style.float="right"
+					span02.style.marginTop="22px"
+					span02.style.marginRight="30px"
+					divchild02.appendChild(span02)
+					//添加X的点击事件
+					span02.onclick=function(){
+						divchild01.style.display="none"
+						div03.style.display="none"
+					}
+					//创建多行文本框
+					var textarea = document.createElement("textarea")
+					textarea.rows="7"
+					textarea.cols="42"
+					textarea.style.fontSize="20px"
+					textarea.placeholder="此刻你的心情是。。。"
+					textarea.style.borderColor="#FFA500"
+					textarea.style.margin="20px 80px"
+					divchild03.appendChild(textarea)
+					//创建确定按钮
+					var input01 = document.createElement("input")
+					input01.type="button"
+					input01.value="确定"
+					input01.style.width="130px"
+					input01.style.height="40px"
+					input01.style.textAlign="center"
+					input01.style.border ="3px solid #DDDDDD"
+					input01.style.background="white"
+					input01.style.borderRadius="10px"
+					input01.style.marginTop="10px"
+					input01.style.marginLeft="100px"
+					input01.style.background="#FFA500"
+					divchild03.appendChild(input01)
+					//添加确定按钮点击事件
+					input01.onclick=function(){
+						var content = textarea.value
+						//判断多行文本中有无内容
+						if(content!=""){
+						console.log(content)
+						//创建一个新的div，并将其置于"1楼"div之前
+						var div001 = document.createElement("div")
+						div001.className="div02"
+						div001.style.width="800px"
+						div001.style.height="108px"
+						div001.style.border="1px solid black"
+						div001.style.background="#DEDE0F"
+						div001.style.margin="12px auto"
+						div001.style.top="0px"
+						//创建p标签，将多行文本内容放入该标签中，再将该标签放入新的div中
+						var p01 = document.createElement("p")
+						p01.innerHTML="   "+content
+						div001.appendChild(p01)
+						var div02 = document.getElementsByClassName("div02")[0]
+						document.body.insertBefore(div001,div02)
+						}
+						divchild01.style.display="none"
+						div03.style.display="none"
+					}
+					//创建取消按钮
+					var input02 = document.createElement("input")
+					input02.type="button"
+					input02.value="取消"
+					input02.style.width="130px"
+					input02.style.height="40px"
+					input02.style.textAlign="center"
+					input02.style.border ="3px solid #DDDDDD"
+					input02.style.background="white"
+					input02.style.borderRadius="10px"
+					input02.style.marginTop="10px"
+					input02.style.marginLeft="20px"
+					divchild03.appendChild(input02)
+					//添加取消按钮的点击事件
+					input02.onclick=function(){
+						divchild01.style.display="none"
+						div03.style.display="none"
+					}
+				}
+			}
+		</script>
+		<style>
+			body {
+				min-width: 1420px;
+			}
+			.div02 {
+				width: 800px;
+				height: 108px;
+				border: 1px solid black;
+				background: #DEDE0F;
+				margin: 12px auto;
+			}
+		</style>
+	</head>
+	<body>
+		<!--添加发表按键模块-->
+		<div class="div01">
+			<input type="button" class="input011" value="发表" style="width: 120px;height: 40px; float: left;" />
+		</div>
+		<div class="div02">
+			<p>   1楼</p>
+		</div>
+		<div class="div02">
+			<p>   2楼</p>
+		</div>
+		<div class="div02">
+			<p>   3楼</p>
+		</div>
+		<div class="div02">
+			<p>   4楼</p>
+		</div>
+		<div class="div02">
+			<p>   5楼</p>
+		</div>
+		<!--添加点击发表后整个屏幕的灰色模块并设置元素的堆叠顺序，让其不可见-->
+		<div class="div03" style="width: 100%;height:100%;z-index: -1;position: absolute;top: 0px;">
+		</div>
+	</body>
+</html>
