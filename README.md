@@ -1,2 +1,2 @@
 # 评论模块
-### http://htmlpreview.github.io/?/js-example/blob/master/评论/评论1.html
+### https://GAOHANqq.github.io/js-example/blob/master/%E8%AF%84%E8%AE%BA/%E8%AF%84%E8%AE%BA1.html
