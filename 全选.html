@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style type="text/css">
+	.wrap{
+		width: 400px;
+		margin:100px auto;
+		text-align:center;
+		border:1px solid #999;
+		-webkit-user-select:none;
+	}
+	.wrap input{
+		display:inline-block;
+		margin:20px 0;
+	}
+	.wrap label{
+		cursor:pointer;
+	}
+	#reAll{
+		display:inline-block;
+		cursor:pointer;
+	}
+  
+  </style>
+ </head>
+ <body>
+	<div class="wrap">
+		<div class="list">
+			<input type="checkbox" id="input1" /><label for="input1">数学</label>
+			<input type="checkbox" id="input2" /><label for="input2">语文</label>
+			<input type="checkbox" id="input3" /><label for="input3">英语</label>
+			<input type="checkbox" id="input4" /><label for="input4">化学</label>
+			<input type="checkbox" id="input5" /><label for="input5">物理</label>
+			<input type="checkbox" id="input6" /><label for="input6">体育</label>
+		</div>
+		<br/><br/>
+		<div class="btn">
+			<input type="checkbox" id="all"/><label for="all">全选</label>
+			<p id="reAll">反选</p>
+		</div>
+		
+	</div>		
+ </body>
+ <script>
+	(function(){
+		var aInput = document.querySelectorAll(".wrap .list input");
+		var aLabel = document.querySelectorAll(".wrap .list label");
+		var oBtn = document.getElementById("all");
+		var oP = document.getElementById("reAll");
+		var len = aLabel.length;
+		var num = 0;
+
+				//检查单选是否全部选中
+				function numIsLen(){
+					oBtn.checked = num === len?true:false;
+				}
+				//全选  反选
+				(function(){
+					//全选
+					oBtn.onclick = function(){
+					
+						var x = oBtn.checked;//全选按钮
+						var bool = x === true?true:false;
+						
+						for(var i=0;i<len;i++){
+							(function(i){
+								aInput[i].checked = bool;
+							})(i)
+						}
+						num = len;
+					}
+
+					//反选
+					oP.onclick = function(){
+						for(var i=0;i<len;i++){
+							if(aInput[i].checked === true){
+								aInput[i].checked = false;
+							}else{
+								aInput[i].checked = true;
+							}
+						}
+
+						num = len - num;
+						numIsLen();
+						
+					}
+				
+				})();
+				
+				//单个的点击与全选按钮的关联
+				(function(){
+					for(var i=0;i<len;i++){
+						
+						aInput[i].onclick = function(){
+							this.checked === true?num++:num--;
+							numIsLen();
+							
+						}
+						
+					}
+				})();
+		
+		})();
+ </script>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="Fly">
+    <title>Title</title>
+    <style>
+        *{ margin: 0; padding: 0; font-family:Microsoft yahei,serif;}
+        li{ list-style:none;}
+        #box{
+            width: 310px;
+            height: 75px;
+            margin: 30px auto;
+            font-size: 12px;
+            line-height: 75px;
+        }
+        #box span{
+            float: left;
+            color: red;
+        }
+        #box ul{
+            float: left;
+            width: 100px;
+            height: 20px;
+            margin-top: 27px;
+        }
+        #box ul li{
+            float: left;
+            width: 20px;
+            height: 20px;
+            background: url("img/star.png");
+            cursor: pointer;
+        }
+        #box ul li.on{
+            background-position: 0px -27px;
+        }
+        #box p{
+            float: right;
+            width: 120px;
+            height: 70px;
+            line-height: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <span>星级评分：</span>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <p>提示：请认真给当前文章打分</p>
+    </div>
+    <script>
+        var aLi = document.querySelectorAll("#box ul li");
+        var oP = document.querySelector("#box p");
+        var oUl = document.querySelector("#box ul");
+        var length = aLi.length;
+        var showIndex = -1;//代表最终的评分
+        var pTxt = ["提示：请认真给当前文章打分","很差","较差","还行","推荐","力荐"];
+        oUl.onmouseleave = function () {
+            change( showIndex );
+        };
+        for (var i = 0; i < length; i++) {
+            aLi[i].afei = i;
+            aLi[i].onclick = function () {
+                showIndex = this.afei;//点击之后，让最终评分变为当前序号
+            };
+            aLi[i].onmouseenter = function () {
+                //var index = this.afei;
+                change( this.afei );
+            };
+        }
+        function change( x ) {
+            oP.innerHTML = pTxt[x+1];
+            for (var j = 0; j < length; j++) {
+                aLi[j].className = "";
+            }
+            for (j = 0; j <= x; j++) {
+                aLi[j].className = "on";
+            }
+        }
+
+
+        //                //改变提示框内容
+        //                oP.innerHTML = pTxt[index+1];
+        //
+        //                //先全部去掉名字
+        //                for (var j = 0; j < length; j++) {
+        //                    aLi[j].className = "";
+        //                }
+        //
+        //                //从第一个当当前这个，都加上 on 名字
+        //                for (j = 0; j <= index; j++) {
+        //                    aLi[j].className = "on";
+        //                }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
