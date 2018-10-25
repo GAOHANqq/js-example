@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>响应式瀑布流</title>
+	</head>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		ul{
+			position: relative;
+			
+		}
+		li{	
+			position: absolute;
+		}
+	</style>
+	<body>
+		<ul></ul>
+	</body>
+	<script type="text/javascript">
+		var ul = document.querySelector("ul");
+		//根据窗口大小决定li元素列数
+		var ulw = parseInt(getComputedStyle(ul,[]).width)
+		console.log(ulw)
+		
+		if(ulw>1000){
+			var arr = [0,0,0,0,0]
+			
+		}else if(ulw>800){
+			var arr = [0,0,0,0]
+			
+		}else if(ulw>600){
+			var arr = [0,0,0,0]
+			
+		}else if(ulw>400){
+			var arr = [0,0,0,0]
+			
+		}else if(ulw<=400){
+			var arr = [0,0,0]
+			
+		}else
+			var arr = [0]
+		
+
+		var index
+		for (var i=0;i<20;i++) {
+			var minH = Math.min.apply(Math,arr)//取数组最小值
+			for (var k=0;k<arr.length;k++) {
+				if(arr[k] == minH){
+					index = k;
+					break;
+				}
+			}
+			var newli = document.createElement("li")
+			newli.style.backgroundColor = "rgb("+Math.floor(Math.random()*256)+","+Math.floor(Math.random()*256)+","+Math.floor(Math.random()*256)+")"
+			var h = Math.floor(Math.random()*150+50)
+			newli.style.height = h + "px";
+			newli.style.width = (100/arr.length-2) +"%";
+			newli.style.top = arr[index]+"px"
+			newli.style.left = index*100/arr.length+2+"%"
+			ul.appendChild(newli)
+			arr[index] += h +10
+		}
+		
+		
+		
+	</script>
+</html>

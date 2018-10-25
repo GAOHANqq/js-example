@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<button>加载图片</button>
+	</body>
+	<script type="text/javascript">
+		var btn = document.querySelector("button")
+		var arr = ["img/01.jpg","img/02.jpg","img/03.jpg","img/04.jpg"]
+		
+		
+		btn.onclick = function(){
+			var newImg = document.createElement("img")
+			newImg.style.width = "250px"
+			newImg.style.display = "block"
+			newImg.src = arr[Math.floor(Math.random()*4)]
+			
+			
+			if(btn.parentNode.children.length>=6){
+				btn.parentNode.children[1].remove()
+			}
+			document.querySelector("body").appendChild(newImg)
+				
+		}
+		
+		
+		
+		
+		
+		
+		
+	</script>
+</html>
