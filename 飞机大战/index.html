@@ -1,0 +1,787 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <meta name="keywords" content="关键词">
+        <meta name="description" content="描述">
+        <meta name="author" content="Danew">
+        <style>
+            body{font-family: "Microsoft YaHei",serif;}
+            body,dl,dd,p,h1,h2,h3,h4,h5,h6{margin:0;}
+            ol,ul,li{margin:0;padding:0;list-style:none;}
+            img{border:none;}
+
+            #wrap{
+                overflow: hidden;
+                position: relative;
+                width:512px;
+                height:768px;
+                background-image: url("img/bg_1.jpg");
+                margin:0 auto;
+            }
+            #menu,#game,#over{
+                position: absolute;
+                width:100%;
+                height:100%;
+                left:0;
+                top:0;
+            }
+            #game,#over{
+                display: none;
+            }
+            #menu .title{
+                padding:100px 0 200px;
+                font-size: 40px;
+                color:white;
+                text-align: center;
+                font-weight: bold;
+            }
+            #menu .list{
+                width:200px;
+                margin:0 auto;
+                text-align: center;
+            }
+            #menu .list li{
+                width:200px;
+                height:40px;
+                background-color: white;
+                font-size:18px;
+                font-weight:bold;
+                margin-bottom: 30px;
+                line-height:40px;
+            }
+            #menu .list li:last-child{
+                background-color: #f9a886;
+                color:red;
+            }
+            #menu .list li:hover{
+                background-color: pink;
+                color:red;
+                cursor: pointer;
+            }
+            #game .plane,#game .bullet,#game .enemy,#game .boom{
+                position: absolute;
+            }
+            #game .plane.hurt{
+                animation: hurt .9s linear 1;
+            }
+            @keyframes hurt {
+                0%{opacity: 1}
+                16%{opacity: 0}
+                32%{opacity: 0.7}
+                48%{opacity: 0}
+                64%{opacity: 0.7}
+                80%{opacity: 0}
+                100%{opacity: 0.7}
+            }
+            #game .boom{
+                transition:opacity 1s;
+            }
+            /*得分区*/
+            #score{
+                position: absolute;
+                left:5px;
+                top:5px;
+                z-index:999;
+                display: none;
+                color:white;
+                font-size:14px;
+                font-weight: bold;
+            }
+            /*结算区*/
+            #over{
+                text-align: center;
+            }
+            #over div{
+                margin:100px 0;
+            }
+            #over div p{
+                color:white;
+                font-size: 18px;
+                line-height: 30px;
+                font-weight: bold;
+            }
+            #over div .grade{
+                font-size: 20px;
+                color:#f00;
+            }
+            #over div .titlename{
+                font-size: 20px;
+                color: #f60;
+            }
+            #over button{
+                width: 100px;
+                height:35px;
+                font-size: 18px;
+                font-family: "楷体";
+                font-weight: bold;
+                cursor: pointer;
+            }
+            /*游戏音乐*/
+            #menu .music{
+                position: absolute;
+                left: 0;
+                right: 0;
+                top:260px;
+                width:80px;
+                margin:auto;
+            }
+            #menu .music>img{
+                float: left;
+                width:30px;
+                height:30px;
+                margin-right:10px;
+            }
+            #menu .music .switch{
+                float: left;
+                width:30px;
+                height:30px;
+                background-size: 60px 30px;
+                background-image: url("img/switch.jpg");
+                background-position: -30px center;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <!--主菜单界面-->
+            <div id="menu">
+                <p class="title">打飞机v1.0</p>
+                <div class="music">
+                    <img src="img/music.jpg" alt="">
+                    <div class="switch"></div>
+                    <audio src='img/music.mp3' loop></audio>
+                </div>
+                <ul class="list">
+                    <li>简单</li>
+                    <li>中等</li>
+                    <li>困难</li>
+                    <li>充钱了</li>
+                </ul>
+            </div>
+            <!--游戏区域-->
+            <div id="game"></div>
+            <!--结算区域-->
+            <div id="over">
+                <div class="goal">
+                    <p>您最终的得分是:</p>
+                    <p class="grade">0</p>
+                </div>
+                <div class="title">
+                    <p>获得称号:</p>
+                    <p class="titlename">走位风骚！</p>
+                </div>
+                <button id="restart">重新开始</button>
+            </div>
+            <!--得分区-->
+            <div id="score">0</div>
+            <!--配音区-->
+            <audio src="img/gameOver.mp3" id="gameOverAudio" ></audio>
+        </div>
+        
+        <script>
+            (function () {
+                //公用变量
+                let oWrap = document.getElementById("wrap"),    //大盒子
+                    oMenu = document.getElementById("menu"),    //主菜单盒子
+                    oGame = document.getElementById("game"),    //游戏区域盒子
+                    oOver = document.getElementById("over"),    //游戏结束盒子
+                    allBullet = document.getElementsByClassName("bullet"),   //所有子弹，动态
+                    oPlane = document.getElementsByClassName("plane"),        //我军战机
+                    oScore = document.getElementById("score"),               //得分盒子
+                    disScore = document.querySelector("#over .goal .grade"), //结算分数
+                    titleName=document.querySelector("#over .title .titlename"),//结算称号
+                    restart=document.getElementById("restart"),
+                    sWitch=document.querySelector("#menu .switch"),    //音乐开关
+                    audio=document.querySelector("#menu audio"),       //游戏音乐
+                    scoreCount=0,                                       //得分变量
+                    moveFunc=null,                                      //鼠标移动事件
+                    bulletTimer,                                        //子弹生成定时器
+                    enemyTimer,                                         //敌军生成定时器
+                    mapTimer,                                           //地图轮播定时器
+                    mapTop=0,                                             //地图的y轴
+                    honor=[                                          //称号数据库
+                        "菜得…算了我不想说了…",
+                        "抠脚侠",
+                        "初级飞行员射手",
+                        "渐入佳境",
+                        "中级飞行员射手",
+                        "高级飞行员射手",
+                        "大师级射手",
+                        "独孤求败！",
+                    ],
+                    gameOverAudio = document.getElementById("gameOverAudio"),  //游戏结束音效
+                    aSA =document.getElementsByClassName("shotAudio"),          //子弹射击音效
+                    onoff=false,                                               //音效开启标志位
+                    ifMoreFire=false,                                          //加大火力标志位
+                    scoreA = document.createElement("audio")
+                ;
+
+
+                //音乐开关
+                sWitch.addEventListener("click",function () {
+                    onoff=!onoff;
+                    if(onoff){   //开
+                        sWitch.style.backgroundPositionX = "0px";
+                        audio.play();
+                    }else{
+                        sWitch.style.backgroundPositionX = "-30px";
+                        audio.pause();
+                    }
+                },false);
+
+                //初始化，给li添加点击事件
+                (function () {
+                    //游戏难度选择键
+                    let aLi = [...document.querySelectorAll("#menu .list li")];
+                    aLi.forEach((ele,index)=>{
+                        ele.addEventListener("click",function (ev) {
+                            start(ev.pageX,ev.pageY,index);
+                        });
+                    });
+                    //重新开始  添加事件
+                    restart.addEventListener("click",function () {
+                        oGame.style.display = "none";
+                        oMenu.style.display = "block";
+                        oOver.style.display = "none";
+                        oScore.style.display= "none";
+                        //清除定时器
+                        clearInterval(mapTimer);
+                        //背景图片恢复
+                        oWrap.style.backgroundImage="url(img/bg_1.jpg)";
+                        //坐标恢复
+                        mapTop=0;
+                        oWrap.style.backgroundPositionY = mapTop+'px';
+                        //音效
+                        if(onoff){
+                            gameOverAudio.pause();
+                            audio.play();
+                        }
+                    },false);
+                })();
+
+
+                //进入游戏
+                function start(pageX,pageY,index){
+                    //切换游戏区域
+                    gameView();
+                    //生成我军战机
+                    createPlane(pageX,pageY,index);
+                    //生成敌军
+                    createEnemy(index);
+                    //地图滚动
+                    mapMove(index);
+                }
+                //切换游戏区域
+                function gameView() {
+                    oGame.style.display = "block";
+                    oMenu.style.display = "none";
+                    oOver.style.display = "none";
+                    oScore.style.display= "block";
+                }
+                //地图轮播
+                function mapMove(index) {
+                    switch (index) {
+                        case 0:
+                            oWrap.style.backgroundImage="url(img/bg_1.jpg)";
+                            break;
+                        case 1:
+                            oWrap.style.backgroundImage="url(img/bg_2.jpg)";
+                            break;
+                        case 2:
+                            oWrap.style.backgroundImage="url(img/bg_3.jpg)";
+                            break;
+                        case 3:
+                            oWrap.style.backgroundImage="url(img/bg_4.jpg)";
+                            break;
+                    }
+                    mapTimer=setInterval(mMove,60);
+                };
+                //轮播函数
+                function mMove() {
+                    mapTop++;
+                    oWrap.style.backgroundPositionY = mapTop+'px';
+                }
+                //定位我军战机器
+                function createPlane(pageX,pageY,index) {
+                    let width = 50,             //设置战机大小
+                        height= 50,
+                        left = pageX- oWrap.offsetLeft-width/2,       //定位战机生成坐标
+                        top = pageY - oWrap.offsetTop - height/2,
+                        plane = new Image();    //新战机
+
+                    //战机模板
+                    plane.src = "img/plane_0.png";
+                    plane.style.width = width+"px";
+                    plane.style.height = height+"px";
+                    plane.style.left = left+"px";
+                    plane.style.top = top+"px";
+                    plane.classList.add("plane");
+                    //我军初始血量为3
+                    plane.HP=3;
+                    //生成战机
+                    oGame.appendChild(plane);
+
+                    //战机跟随鼠标移动
+                    moveFunc = planeMove(pageX,pageY,plane,left,top,width,height);
+                    
+                    //战机发射子弹
+                    planeShoot(plane,width,index);
+                };
+                //我军战机跟随鼠标移动
+                function planeMove(pageX,pageY,plane,left,top,width,height) {
+                    //定义战机最大位移限制
+                    let minLeft = -width/2,
+                        maxLeft = oWrap.offsetWidth-width/2,
+                        minTop = 0,
+                        maxTop = oWrap.offsetHeight-height/2;
+                    //监听鼠标移动
+                    document.addEventListener("mousemove",move,false);
+                    //运动函数
+                    function move(ev) {
+                        //位移差
+                        let _x = ev.pageX-pageX,
+                            _y = ev.pageY-pageY,
+                            newLeft = left + _x,
+                            newTop = top + _y
+                        ;
+                        //限制定位
+                        newLeft = Math.max(newLeft,minLeft);
+                        newLeft = Math.min(newLeft,maxLeft);
+                        newTop = Math.max(newTop,minTop);
+                        newTop = Math.min(newTop,maxTop);
+                        //更新坐标
+                        plane.style.left = newLeft+"px";
+                        plane.style.top = newTop+"px";
+                    }
+                    return move;
+                }
+                //战机发射子弹
+                function planeShoot(oPlane,pWidth,index) {
+                    //定义子弹生成速度
+                    let time=[100,200,250,50][index],
+                        width=25,         //子弹大小
+                        height=25,
+                        bullet=new Image(),
+                        step = 8;         //子弹运动步长
+                    //子弹模板
+                    bullet.src="img/fire.png";
+                    bullet.width= width;
+                    bullet.height = height;
+                    bullet.className = "bullet";
+                    //定义子弹音效模板
+                    let shotAudio=document.createElement("audio");
+                    shotAudio.src = "img/shot.mp3";
+                    shotAudio.className = "shotAudio";
+
+                    //定时生成子弹
+                    !function creatBullet(){
+
+                        //两颗子弹
+                        if(ifMoreFire){
+                            //克隆一个新的子弹
+                            let Bullet1 = bullet.cloneNode(),
+                                Bullet2 = bullet.cloneNode()
+                            ;
+                            //定位新子弹的坐标
+                            let left1 = oPlane.offsetLeft,
+                                left2 = oPlane.offsetLeft+pWidth-width,
+                                top = oPlane.offsetTop;
+                            Bullet1.style.left = left1+"px";
+                            Bullet1.style.top = top+"px";
+                            Bullet2.style.left = left2+"px";
+                            Bullet2.style.top = top+"px";
+                            //加入新子弹
+                            oGame.appendChild(Bullet1);
+                            oGame.appendChild(Bullet2);
+
+                            //子弹音效
+                            let newshotAudio1=null,
+                                newshotAudio2=null
+                            ;
+                            if(onoff){
+                                newshotAudio1=shotAudio.cloneNode();
+                                newshotAudio2=shotAudio.cloneNode();
+                                oWrap.appendChild(newshotAudio1);
+                                oWrap.appendChild(newshotAudio2);
+                                newshotAudio1.play();
+                                newshotAudio2.play();
+                            }
+
+
+                            //让子弹1飞
+                            !function m1(){
+                                //检测子弹1是否还在
+                                if(!Bullet1 || !Bullet1.parentNode){
+                                    return;
+                                }else{
+                                    top -= step;
+                                    Bullet1.style.top = top+"px";
+                                    if(top <= -height){
+                                        //清除子弹
+                                        oGame.removeChild(Bullet1);
+                                        //清除音效
+                                        if(onoff){
+                                            oWrap.removeChild(newshotAudio1);
+                                        }
+                                    }else{
+                                        requestAnimationFrame(m1);
+                                    }
+                                }
+                            }();
+
+                            //让子弹2飞
+                            !function m2(){
+                                //检测子弹1是否还在
+                                if(!Bullet2 || !Bullet2.parentNode){
+                                    return;
+                                }else{
+                                    top -= step;
+                                    Bullet2.style.top = top+"px";
+                                    if(top <= -height){
+                                        //清除子弹
+                                        oGame.removeChild(Bullet2);
+                                        //清除音效
+                                        if(onoff){
+                                            oWrap.removeChild(newshotAudio2);
+                                        }
+                                    }else{
+                                        requestAnimationFrame(m2);
+                                    }
+                                }
+                            }();
+
+                        }else{
+                            //克隆一个新的子弹
+                            let newBullet = bullet.cloneNode();
+                            //定位新子弹的坐标
+                            let left = oPlane.offsetLeft+pWidth/2-width/2,
+                                top = oPlane.offsetTop;
+                            newBullet.style.left = left+"px";
+                            newBullet.style.top = top+"px";
+                            //加入新子弹
+                            oGame.appendChild(newBullet);
+
+                            //子弹音效
+                            let newshotAudio=null;
+                            if(onoff){
+                                newshotAudio=shotAudio.cloneNode();
+                                oWrap.appendChild(newshotAudio);
+                                newshotAudio.play();
+                            }
+
+                            //让子弹飞
+                            !function m(){
+                                //检测元素是否还在
+                                if(!newBullet || !newBullet.parentNode)return;
+                                top -= step;
+                                newBullet.style.top = top+"px";
+                                if(top <= -height){
+                                    //清除子弹
+                                    oGame.removeChild(newBullet);
+                                    //清除音效
+                                    if(onoff){
+                                        oWrap.removeChild(newshotAudio);
+                                    }
+                                }else{
+                                    requestAnimationFrame(m);
+                                }
+                            }();
+                        }
+
+                        //定时器生成子弹
+                        bulletTimer = setTimeout(creatBullet,time);
+                    }();
+                }
+                //生成敌军
+                function createEnemy(index){
+                    let time=[500,300,250,100][index],   //飞机生成速度
+                        sWidth=50,      //飞机的大小
+                        sHeight=40,
+                        bWidth=130,
+                        bHeight=100,
+                        count=0,        //飞机的数量
+                        topMax = oWrap.offsetHeight
+                    ;
+                    //小飞机父类
+                    let sEnemy = new Image();
+                    sEnemy.src = "img/enemy_small.png";
+                    sEnemy.width = sWidth;
+                    sEnemy.height = sHeight;
+                    sEnemy.className = "enemy small";
+
+                    //大飞机父类
+                    let bEnemy = new Image();
+                    bEnemy.src="img/enemy_big.png";
+                    bEnemy.width = bWidth;
+                    bEnemy.height = bHeight;
+                    bEnemy.className = "enemy big";
+
+                    //定时器生成敌军
+                    !function copyEnemy() {
+                        //敌军诞生
+                        let newEnemy = ((++count)%5?sEnemy:bEnemy).cloneNode();
+                        //敌军血量(小 1、2  大 6)
+                        newEnemy.HP = count%5?(Math.floor(Math.random()*2+1)):6;
+
+                        //敌军定位
+                        let newTop = -newEnemy.height;
+                        let newLeft = Math.floor(Math.random()*oWrap.offsetWidth-newEnemy.width/2);
+                        //设置坐标
+                        newEnemy.style.left = newLeft+'px';
+                        newEnemy.style.top = newTop+'px';
+                        //敌军入场
+                        oGame.appendChild(newEnemy);
+                        //设置随机一个下降速度
+                        let speed = Math.floor(Math.random()*5+2);
+                        //敌军开启碰瓷模式
+                        !function m(){
+                            //检测元素是否还在
+                            if(!newEnemy||!newEnemy.parentNode)return;
+                            newTop += speed;
+                            newEnemy.style.top = newTop+'px';
+                            if(newTop>=topMax){
+                                oGame.removeChild(newEnemy);
+                            }else{
+                                requestAnimationFrame(m);
+                            }
+                            //敌军与所有子弹的碰撞检测
+                            pz1(newEnemy);
+                            //敌军与我军的碰撞检测
+                            pz2(newEnemy);
+                        }();
+                        enemyTimer = setTimeout(copyEnemy,time);
+                    }();
+                };
+                //碰撞检测
+                function hit(obj1,obj2) {
+                    let T1=obj1.offsetTop,
+                        B1=T1+obj1.offsetHeight,
+                        L1=obj1.offsetLeft,
+                        R1=L1+obj1.offsetWidth,
+                        T2=obj2.offsetTop,
+                        B2=T2+obj2.offsetHeight,
+                        L2=obj2.offsetLeft,
+                        R2=L2+obj2.offsetWidth
+                    ;
+                    return !(R2<L1||L2>R1||T1>B2||T2>B1);  //false没撞上
+                }
+                //敌军与所有子弹的碰撞检测
+                function pz1(oEnemy) {
+                    //检测元素是否还在
+                    if(!oEnemy.parentNode)return;
+                    //获取所有子弹
+                    let aBullet=[...allBullet];
+                    //获取所有子弹的音效
+                    let aShotAudio=null;
+                    if(onoff){
+                        aShotAudio=[...aSA];
+                    }
+                    //所有子弹进行判断
+                    for(let i=0,len=aBullet.length;i<len;i++){
+                        let bullet=aBullet[i],
+                            bAudio=null
+                        ;      //单个子弹
+                        if(onoff){
+                            bAudio=aShotAudio[i];     //单个子弹音效
+                        }
+                        //碰撞与消除
+                        if(hit(oEnemy,bullet)){
+                            //子弹消失
+                            oGame.removeChild(bullet);
+                            //子弹的音效也消失
+                            if(onoff){
+                                oWrap.removeChild(bAudio);
+                            }
+                            //敌军血量减一
+                            oEnemy.HP--;
+                            //打中就得分哦
+                            updateScore();
+                            //音效
+                            if(onoff){
+                                //得分音效
+                                let sA=sAudio();
+                                //延时清除音效
+                                setTimeout(()=>{oWrap.removeChild(sA)},1000);
+                            }
+                            //检测敌军血量是否清零
+                            if(!oEnemy.HP){
+                                //敌军炸毁
+                                boomEnemy(oEnemy);
+                                //得分
+                                updateScore(oEnemy);
+                                //清除敌军
+                                oGame.removeChild(oEnemy);
+                                break;
+                            }
+                        }
+                    }
+                }
+                //敌军与我军的碰撞检测
+                function pz2(e) {
+                    //检测元素是否还在DOM中
+                    if(!e.parentNode)return;
+                    //我军战机
+                    let p = oPlane[0];
+                    //飞机消失后停止
+                    if(!p)return;
+                    //碰撞处理
+                    if(hit(e,p)){
+                        //掉一滴血
+                        p.HP--;
+                        //敌军炸毁
+                        boomEnemy(e);
+                        //刷新得分
+                        updateScore(e);
+                        //清除敌军
+                        oGame.removeChild(e);
+                        //音效
+                        if(onoff){
+                            //得分音效
+                            let sA=sAudio();
+                            //延时清除音效
+                            setTimeout(()=>{oWrap.removeChild(sA)},1000);
+                        }
+                        //我军炸毁
+                        if(!p.HP){
+                            //我军炸毁
+                            boomPlane(p);
+                            //清除鼠标移动监听事件
+                            document.removeEventListener("mousemove",moveFunc,false);
+                            //清除子弹生成
+                            clearTimeout(bulletTimer);
+                            //清除敌军生成
+                            clearTimeout(enemyTimer);
+                            //清除战机
+                            oGame.removeChild(p);
+                            //跳转进游戏结算盒子
+                            setTimeout(gameOver,2000);
+                            //游戏结束音效开启
+                            if(onoff){
+                                gameOverAudio.play();
+                                audio.pause();
+                            }
+                        }else{
+                            //我军受伤
+                            p.classList.add("hurt");
+                            //清除动画
+                            setTimeout(()=>{
+                                p.classList.remove("hurt");
+                            },900);
+                        }
+                    }
+                }
+                //敌军炸毁
+                function boomEnemy(e) {
+                    let oBoom=new Image();
+                    oBoom.src='img/boom_small.png';
+                    oBoom.width=e.width;
+                    oBoom.height=e.height;
+                    oBoom.style.left=e.offsetLeft+'px';
+                    oBoom.style.top=e.offsetTop+'px';
+                    oBoom.className="boom";
+                    oGame.appendChild(oBoom);
+                    setTimeout(()=>{
+                        oBoom.style.opacity=0;      //加定时器，采用动画效果
+                    });
+                    //动画完成后的事件
+                    oBoom.addEventListener("transitionend",function () {
+                        oGame.removeChild(oBoom);
+                    })
+                }
+                //我军炸毁
+                function boomPlane(e) {
+                    let oBoom=new Image();
+                    oBoom.src='img/boom_big.png';
+                    oBoom.width=e.width;
+                    oBoom.height=e.height;
+                    oBoom.style.left=e.offsetLeft+'px';
+                    oBoom.style.top=e.offsetTop+'px';
+                    oBoom.className="boom";
+                    oGame.appendChild(oBoom);
+                }
+
+                //得分音效初始化
+                scoreA.src="img/blood.mp3";
+                scoreA.className="sCoreAudio";
+                //得分音效
+                function sAudio() {
+                    let oScoreAudio=scoreA.cloneNode();
+                    oWrap.appendChild(oScoreAudio);
+                    oScoreAudio.play();
+                    return oScoreAudio;
+                }
+
+                //刷新得分
+                function updateScore(e) {
+                    if(!e){                                     //打中10分
+                        scoreCount+=10;
+                    }else if(e.classList.contains("small")){    //小飞机100分
+                        scoreCount+=100;
+                    }else{                                      //大飞机500分
+                        scoreCount+=500;
+                    }
+                    //判断是否加大火力输出
+                    if(scoreCount>10000)ifMoreFire=true;
+                    //DOM页面更新
+                    oScore.innerText = scoreCount+'';
+                }
+                //游戏结算
+                function gameOver() {
+                    let index=0;
+                    //显示结算区域
+                    oOver.style.display="block";
+                    oGame.style.display = "none";
+                    oMenu.style.display = "none";
+                    oScore.style.display= "none";
+                    //分数更新
+                    disScore.innerText = scoreCount;
+                    //称号更新
+                    if(scoreCount<1000){
+                        index=0;
+                    }else if(scoreCount<3000){
+                        index=1;
+                    }else if(scoreCount<5000){
+                        index=2;
+                    }else if(scoreCount<8000){
+                        index=3;
+                    }else if(scoreCount<12000){
+                        index=4;
+                    }else if(scoreCount<23000){
+                        index=5;
+                    }else if(scoreCount<33000){
+                        index=6;
+                    }else{
+                        index=7;
+                    }
+                    titleName.innerText = honor[index];
+                    //分数清零
+                    scoreCount=0;
+                    //更新显示
+                    oScore.innerText = scoreCount+'';
+                    //清理游戏区内容
+                    oGame.innerHTML='';
+                }
+
+
+
+            })();
+        </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
