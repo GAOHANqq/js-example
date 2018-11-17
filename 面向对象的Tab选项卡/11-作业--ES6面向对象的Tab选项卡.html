@@ -1,0 +1,322 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>小书书</title>
+    <meta name="keywords" content="关键词">
+    <meta name="description" content="描述">
+    <meta name="author" content="小书书">
+    <style>
+        body{font-family: "Microsoft YaHei",serif;user-select: none;}
+        body,dl,dd,p,h1,h2,h3,h4,h5,h6{margin:0;}
+        ol,ul,li{margin:0;padding:0;list-style:none;}
+        img{border:none;}
+        #wrap{
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 1px solid #fff;
+            margin: 50px auto;
+        }
+        #wrap .content{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 300px;
+            height: 270px;
+        }
+        #wrap .content ul{
+            width: 100%;
+            height: 270px;
+        }
+        #wrap .content li{
+            display: none;
+            position: absolute;
+            top: 0;
+            left:0;
+            width: 100%;
+            height: 100%;
+        }
+        #wrap .content li.active{
+            display: block;
+        }
+        #wrap .tab{
+            position: absolute;
+            top:0;
+            left:0;
+            width: 100%;
+            height: 30px;
+        }
+        #wrap .tab ul{
+            width: 100%;
+            height: 30px;
+        }
+        #wrap .tab li{
+            float: left;
+            width: 98px;
+            height: 100%;
+            color:#fff;
+            font-size: 16px;
+            font-weight: bolder;
+            text-align: center;
+            line-height: 30px;
+            background-color: pink;
+            border: 1px solid #fff;
+            border-bottom: none;
+            cursor: pointer;
+        }
+        #wrap .tab li.active{
+            background-color: #abcdef;
+        }
+
+        /* 轮播 */
+        #box{
+            user-select: none;
+            width: 500px;
+            height: 360px;
+            margin: 50px auto;
+        }
+        #box .img{
+            /*overflow: hidden;*/
+            position:relative;
+            width: 100%;
+            height: 310px;
+        }
+        #box .img ul{
+            position:absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #box .img ul li{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity .3s;
+        }
+        #box .img ul li.active{
+            opacity: 1;
+            z-index: 2;
+        }
+        #box .img ul li img{
+            width: 500px;
+            height: 310px;
+        }
+
+        #box .tab{
+            overflow:hidden;
+            width: 100%;
+            height: 50px;
+        }
+        #box .tab ul{
+            width: 200%;
+            height: 100%;
+        }
+        #box .tab ul li{
+            float:left;
+            width: 10%;
+            height: 100%;
+            line-height: 50px;
+            text-align: center;
+            background-color: #333;
+            font-size: 12px;
+            color: #a5a5a5;
+            cursor: pointer;
+        }
+        #box .tab ul li.active{
+            background-color: #f4c300;
+            color: #7e4a1c;
+        }
+
+        #box .btn .button{
+            position:absolute;
+            top:50%;
+            z-index: 99;
+            margin-top:-30px;
+            width: 35px;
+            height: 60px;
+            background:url("images/btn.png") no-repeat;
+            cursor: pointer;
+        }
+        #box .btn .left{
+            left:0;
+            background-position: -85px -8px;
+        }
+        #box .btn .right{
+            right:-2px;
+            background-position: -128px -8px;
+        }
+        #box .btn .left:hover{
+            background-position: -6px -8px;
+        }
+        #box .btn .right:hover{
+            background-position: -50px -8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div class="content">
+            <ul>
+                <li class="active" style="background-color: #00ae00">选项卡A</li>
+                <li style="background-color: chartreuse">选项卡B</li>
+                <li style="background-color: palegreen">选项卡C</li>
+            </ul>
+        </div>
+        <div class="tab">
+            <ul>
+                <li class="active">A</li>
+                <li>B</li>
+                <li>C</li>
+            </ul>
+        </div>
+    </div>
+    <div id="box">
+        <div class="img">
+            <ul>
+                <li class="active"><a href=""><img src="images/1.jpg" alt=""></a></li>
+                <li><a href=""><img src="images/2.jpg" alt=""></a></li>
+                <li><a href=""><img src="images/3.jpg" alt=""></a></li>
+                <li><a href=""><img src="images/4.jpg" alt=""></a></li>
+                <li><a href=""><img src="images/5.png" alt=""></a></li>
+            </ul>
+            <div class="btn">
+                <div class="button left"></div>
+                <div class="button right"></div>
+            </div>
+        </div>
+
+        <div class="tab">
+            <ul>
+                <li class="active">欧洲传奇登场</li>
+                <li>标王赛季揭秘</li>
+                <li>中秋活动送礼</li>
+                <li>FO4M不删档</li>
+                <li>CEFL天梯赛</li>
+            </ul>
+        </div>
+
+
+    </div>
+
+    <script>
+        (function(){
+            // 基础的Tab类
+            class Tab{
+                constructor({conEle,tabEle,conClass="active",tabClass="active"}){
+                    this.conEle = conEle;
+                    this.tabEle = tabEle;
+                    this.conClass = conClass;
+                    this.tabClass = tabClass;
+                    this.length = this.tabEle.length;
+                    this.index = 0;
+                    this.addClick();
+                }
+                // Tab的点击事件
+                addClick(){
+                    [...this.tabEle].forEach((ele,index)=>{
+                        ele.onclick = ()=>{
+                            if( this.index ===index )return;
+                            this.change(index);
+                        };
+                    })
+                }
+                // 改变函数
+                change(i){
+                    this.conEle[this.index].classList.remove(this.conClass);
+                    this.tabEle[this.index].classList.remove(this.conClass);
+                    this.index = i;
+                    this.conEle[this.index].classList.add(this.conClass);
+                    this.tabEle[this.index].classList.add(this.conClass);
+                }
+            }
+
+            // 继承Tab,新增自动轮播
+            class TabAuto extends Tab{
+                constructor({conEle,tabEle,conClass="active",tabClass="active",box}){
+                    super({conEle,tabEle,conClass,tabClass});
+                    this.box = box;
+                    this.timer = null;
+                    this.autoplay();
+                    this.changetimer();
+                }
+                autoplay(){
+                    this.timer  = setInterval(()=>{
+                        let i = this.index;
+                        i ++;
+                        i %= this.length;
+                        this.change(i);
+                    },2000);
+                }
+                changetimer(){
+                    this.box.onmouseenter = ()=>{
+                        clearInterval(this.timer);
+                    };
+                    this.box.onmouseleave = ()=>{
+                        this.autoplay();
+                    };
+                }
+            }
+
+            // 继承TabAuto,新增左右按钮
+            class ChangeDir extends TabAuto{
+                constructor({conEle,tabEle,conClass="active",tabClass="active",box,btn}){
+                    super({conEle,tabEle,conClass,tabClass,box});
+                    this.btn = btn;
+                    this.changedir();
+                }
+                changedir(){
+                    [...this.btn].forEach((ele,index)=>{
+                        ele.onclick = ()=>{
+                            let i = this.index;
+                            if( index === 1 ){
+                                i ++;
+                                i %= this.length;
+                            }else{
+                                i --;
+                                if( i < 0 ){
+                                    i = this.length-1;
+                                }
+                            }
+                            this.change(i);
+                        }
+                    });
+                }
+            }
+
+            // 测试
+            new Tab({
+                conEle : document.querySelectorAll("#wrap .content ul li"),
+                tabEle : document.querySelectorAll("#wrap .tab ul li")
+            })
+
+            new ChangeDir({
+                conEle : document.querySelectorAll("#box .img ul li"),
+                tabEle : document.querySelectorAll("#box .tab ul li"),
+                btn : document.querySelectorAll("#box .btn .button"),
+                box : document.getElementById("box")
+            })
+        })();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
