@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <link rel="stylesheet" href="pagination.css" />
+    </head>
+    <body>
+        <div id="pagination"></div>
+    </body>
+
+</html>
+<script type="text/javascript" src="jquery-1.11.2.js"></script>
+<script type="text/javascript" src="pagination.min.js"></script>
+<script>
+    $("#pagination").whjPaging({
+        totalSize: 90,
+        totalPage: 18,
+        callBack: function(currPage, pageSize) {
+            console.log('currPage:' + currPage + '     pageSize:' + pageSize);
+        }
+    });
+</script>

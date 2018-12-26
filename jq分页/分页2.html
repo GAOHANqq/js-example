@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+
+		</style>
+	</head>
+	<body>
+		<div class="bar2 fr" id="pagecontrol">
+			  <ul>
+				  <li><span id="prepage">上一页</span></li>
+				  <li class="num current"><a>1</a></li>
+				  <li class="num"><a>2</a></li>
+				 <li class="num"><a>3</a></li>
+				  <li class="num"><a>4</a></li>
+				 <li class="num"><a>5</a></li>
+				 <li><span id="nextpage">下一页<span></li>
+			 </ul>
+		</div>
+	</body>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+
+		$(function(){
+        var curpage=1;//当前页码
+        var maxpage = 10;//最大页码
+
+        if(maxpage > 1)
+            $("#nextpage").addClass("active");
+
+        $("#rowsToshow").change(function(){
+            console.log($("#rowsToshow").val());
+        })
+        $("#prepage").live("click",function(){
+            curpage = curpage - 1;
+            pageshow(curpage,maxpage);
+        })
+        $("#nextpage").live("click",function(){
+            curpage = curpage + 1;
+            pageshow(curpage,maxpage);
+        })
+        $("#pagecontrol li a").live("click",function(){
+            curpage = Number($(this).text());
+            pageshow(curpage,maxpage);
+        })
+    })
+
+    function pageshow(cp,tp){
+
+        var sp = cp - 2;//startpage
+        var ep = cp + 2;//endpage
+        var eoff = ep - tp;//tp:totalpage
+        if(eoff>0){
+                sp = sp - eoff;
+        }
+        if(sp<=0){
+            ep = ep -sp + 1;
+        }
+        var str = '';
+        if(cp != 1)
+            str = str + '<ul><li><span id="prepage" class="active">上一页</span></li>'
+        else
+            str = str + '<ul><li><span id="prepage">上一页</span></li>'
+        for(var i= sp;i<=ep;i++){
+            if(i>0&& i<=tp){
+                if(i == cp)
+                    str = str + '<li class="num current"><a>'+i+'</a></li>';
+                else
+                    str = str + '<li class="num"><a>'+i+'</a></li>';
+            }
+        }
+
+        if(cp != tp)
+            str = str + '<li><span class="active" id="nextpage">下一页<span></li></ul>';
+        else
+            str = str + '<li><span id="nextpage">下一页<span></li></ul>';
+        $("#pagecontrol").html(str);
+    }
+	</script>
+</html>
+
+
+
+  * 定义回掉函数
+     * @param  number:跳转页
+     * */
+    function pageChange(i) {
+        alert("index is :" + i);
+        Pagination.Page($(".ht-page"), i, 10000, 10);
+    }
+
+    /*
+     * 初始化插件
+     * @param  object:翻页容器对象
+     * @param  function:回调函数
+     * */
+    Pagination.init($(".ht-page"), pageChange);
+
+    /*
+    * 首次调用
+    * @param  object:翻页容器对象
+    * @param  number:当前页
+    * @param  number:总页数
+    * @param  number:每页数据条数
+    * */
+    Pagination.Page($(".ht-page"), 3, 10000, 10);

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>分页</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" type="text/css" href="paging.css">
+</head>
+
+<body>
+
+	<div id="pageTool"></div>
+
+	<div id="pageToolbar"></div>
+
+	<div id="page"></div>
+
+	<script type="text/javascript" src="jquery-1.11.2.js"></script>
+	<script type="text/javascript" src="paging.js"></script>
+	<script>
+
+		var page = new Paging();
+		page.init({	target: $('#pageTool'), pagesize: 10, count: 100, current:1
+		});
+
+
+		//jquery插件的写法
+		$('#pageToolbar').Paging({ pagesize: 10, count: 85});
+
+
+		$('#page').Paging({ pagesize: 10, count: 85, toolbar: false,});
+
+
+		//下面是个ajax的例子
+
+/*
+		var page = new Paging();
+		$.post('url',{current:1,pagesize:10},function(res){
+			//do something
+			page.init({
+			target: $('#pageTool'), pagesize: 10, count: res.count, current:1,callback: function (pagecount, size, count) {
+					$.post('url',{current:pagecount,pagesize:10},function(res){
+						//do something
+					})
+				}
+			});
+		})
+*/
+</script>
+</body>
+
+</html>

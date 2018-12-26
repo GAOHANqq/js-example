@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+
+		</style>
+	</head>
+	<body>
+			<div class="page-box">
+                <a href="javascript:void(0)" class="prve-btn button">&nbsp;</a>
+                <a href="javascript:void(0)" class="number-btn button num1 select" style="display: none;"></a>
+                <a href="javascript:void(0)" class="number-btn button num2" style="display: none;"></a>
+                <span class="button pre-dot" style="display: none;">...</span>
+                <a href="javascript:void(0)" class="number-btn button num3" style="display: none;"></a>
+                <a href="javascript:void(0)" class="number-btn button num4" style="display: none;"></a>
+                <a href="javascript:void(0)" class="number-btn button num5" style="display: none;"></a>
+                <span class="button suff-dot" style="display: none;">...</span>
+                <a href="javascript:void(0)" class="number-btn button num6" style="display: none;"></a>
+                <a href="javascript:void(0)" class="number-btn button num7" style="display: none;"></a>
+                <a href="javascript:void(0)" class="next-btn button">&nbsp;</a>
+            </div>
+	</body>
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script>
+		handlePageBox: function () {
+            pageFunc.pageBox.show();
+            var pageCount = parseInt(pageFunc.workListTotalCount / pageFunc.workListPageSize);
+            if (pageFunc.workListTotalCount % pageFunc.workListPageSize > 0) pageCount++;
+            pageFunc.workListPageCount = pageCount;
+            $(".number-btn,.suff-dot,.pre-dot", pageFunc.pageBox).hide();
+
+            if(pageFunc.workListPageIndex == 1)
+                $(".prve-btn").hide();
+            else
+                $(".prve-btn").show();
+            if(pageFunc.workListPageIndex == pageCount)
+                $(".next-btn").hide();
+            else
+                $(".next-btn").show();
+
+            if(pageCount <2){
+                $(".prve-btn,.next-btn").hide();
+            }
+            else if (pageCount <= 7) {
+                for (var i = 1; i <= pageCount; i++) {
+                    pageFunc.pageBox.find(".num" + i).html(i).attr("data-index", i).show();
+                }
+            }
+            else {
+                $(".num1", pageFunc.pageBox).html(1).attr("data-index", "1");
+                $(".num2", pageFunc.pageBox).html(2).attr("data-index", "2");
+                if (pageFunc.workListPageIndex <= pageCount - 4)
+                    $(".suff-dot", pageFunc.pageBox).show();
+                if (pageFunc.workListPageIndex <= 4) {
+                    $(".pre-dot", pageFunc.pageBox).hide();
+                    $(".num3", pageFunc.pageBox).html(3).attr("data-index", "3");
+                    $(".num4", pageFunc.pageBox).html(4).attr("data-index", "4");
+                    $(".num5", pageFunc.pageBox).html(5).attr("data-index", "5");
+                }
+                else if (pageFunc.workListPageIndex > 4) {
+                    $(".pre-dot", pageFunc.pageBox).show();
+                    $(".num3", pageFunc.pageBox).html(pageFunc.workListPageIndex - 1).attr("data-index", pageFunc.workListPageIndex - 1);
+                    $(".num4", pageFunc.pageBox).html(pageFunc.workListPageIndex).attr("data-index", pageFunc.workListPageIndex);
+                    $(".num5", pageFunc.pageBox).html(pageFunc.workListPageIndex + 1).attr("data-index", pageFunc.workListPageIndex + 1);
+                }
+                if (pageFunc.workListPageIndex > pageCount - 4) {
+                    $(".suff-dot", pageFunc.pageBox).hide();
+                    $(".num3", pageFunc.pageBox).html(pageCount - 4).attr("data-index", pageCount - 4);
+                    $(".num4", pageFunc.pageBox).html(pageCount - 3).attr("data-index", pageCount - 3);
+                    $(".num5", pageFunc.pageBox).html(pageCount - 2).attr("data-index", pageCount - 2);
+                }
+                $(".num6", pageFunc.pageBox).html(pageCount - 1).attr("data-index", pageCount - 1);
+                $(".num7", pageFunc.pageBox).html(pageCount).attr("data-index", pageCount);
+                $(".number-btn", pageFunc.pageBox).show();
+            }
+            //分页按钮居中
+            var pb_num = $('.page-box a').length;
+            var ellipsis = $('.page-box span').length;
+            $('.page-box').width((pb_num + ellipsis) * 40);
+
+            $(".page-box .number-btn").removeClass("select");
+            $(".page-box .number-btn[data-index='" + pageFunc.workListPageIndex + "']").addClass("select");
+            pageFunc.pageBox.show();
+
+            //分页按钮点击
+            $('.page-box .number-btn').unbind('click').bind('click', function () {
+                $('.page-box .number-btn').removeClass('select');
+                pageFunc.workListPageIndex = parseInt($(this).html());
+                pageFunc.getSendList();
+            });
+
+            //前一页按钮点击
+            $('.page-box .prve-btn').unbind('click').bind('click', function () {
+                if (pageFunc.workListPageIndex == 1) return;
+                pageFunc.workListPageIndex--;
+                pageFunc.handlePageBox();
+                $(".page-box .number-btn[data-index='" + pageFunc.workListPageIndex + "']").trigger("click");
+            });
+
+            //前一页按钮点击
+            $('.page-box .next-btn').unbind('click').bind('click', function () {
+                if (pageFunc.workListPageIndex == pageFunc.workListPageCount) return;
+                pageFunc.workListPageIndex++;
+                pageFunc.handlePageBox();
+                $(".page-box .number-btn[data-index='" + pageFunc.workListPageIndex + "']").trigger("click");
+            });
+        }
+		handlePageBox();
+	</script>
+	<script>
+    $('#pageTool').Paging({
+        pagesize: 5,
+		count: pageFunc.workListTotalCount
+    });
+
+</script>
+</html>
