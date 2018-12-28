@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+		<head>
+				<meta charset="utf-8" />
+				<title>page demo</title>
+		</head>
+		<body>
+            <h1>page demo</h1>
+
+				<div id="pagination"></div>
+
+				<script src="jquery-1.7.2.js"></script>
+				<script src="page.js"></script>
+                <script>
+                    $(function () {
+
+						 var pager = new Pagination({
+							"id":"pagination",//组件wrapper id名
+							"cur":1,//当前页码
+							"total":30,//总共页码
+							"change":function(page){//当换页之后的回调函数，注入换到第几页的实参page
+							}
+
+							});
+                    });
+            </script>
+		</body>
+</html>

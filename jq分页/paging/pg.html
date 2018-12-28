@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>小书书</title>
+        <meta name="keywords" content="关键词">
+        <meta name="description" content="描述">
+        <meta name="author" content="小书书">
+
+		<link rel="stylesheet" href="pg.css" />
+
+        <style>
+            body{font-family: "Microsoft YaHei",serif;user-select: none;}
+            body,dl,dd,p,h1,h2,h3,h4,h5,h6{margin:0;}
+            ol,ul,li{margin:0;padding:0;list-style:none;}
+            img{border:none;}
+
+        </style>
+    </head>
+    <body>
+        <div class="box" id="box"></div>
+
+
+        <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+        <script src="pg.js"></script>
+        <script>
+
+				$('#box').paging({
+					initPageNo: 0, // 初始页码
+					totalPages: 20, //总页数
+					slideSpeed: 600, // 缓动速度 单位毫秒
+					jump: true, //是否支持跳转
+					callback: function(page) {
+						// 回调函数
+					 }
+				});
+
+
+
+
+        </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

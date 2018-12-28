@@ -1,0 +1,32 @@
+.paging span {
+	display          : inline-block;
+	width            : 30px;
+	height           : 100%;
+	background-color : #fff;
+	font             : 14px/2 tahoma, 微软雅黑, \5b8b\4f53;
+	text-align       : center;
+	border-radius    : 3px;
+	margin           : 0 3px;
+	color            : #666;
+	user-select      : none;
+}
+.paging span a{
+	display: block;
+	color: #000;
+	text-decoration: none;
+}
+
+.paging a:hover{
+	background-color : #3e73f6;
+	color            : #fff;
+}
+.paging span.active{
+	background-color : #3e73f6;
+	color: #fff;
+}
+span.prev,span.next{
+	width: 50px;
+}
+span.last,span.first{
+	width: 40px;
+}
