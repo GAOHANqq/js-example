@@ -13,291 +13,311 @@
 			img{display:block;border:0;}
 			a{text-decoration:none;color:#222;}
 
+
+			/*分页栏目*/
+			.page-box {
+				overflow   : hidden;
+				margin     : 30px auto;
+				text-align : center;
+			}
+
+			.page-box .button {
+				width            : 30px;
+				height           : 30px;
+				background-color : #fff;
+				line-height      : 30px;
+				font-size        : 14px;
+				text-align       : center;
+				border-radius    : 3px;
+				margin           : 0 3px;
+				color            : #666;
+				display          : inline-block;
+			}
+
+			.page-box a:hover, .page-box .select {
+				background-color : #3e73f6;
+				color            : #fff;
+			}
+
+			.page-box .prve-btn, .page-box .next-btn {
+				/* background : url('../../images/list2/page_op_btn.png') #fff no-repeat; */
+			}
+
+			.page-box .prve-btn {
+				background-position : 10px 8px;
+			}
+
+			.page-box .next-btn {
+				background-position : -40px 8px;
+			}<font size="" color="">
+
+			.page-box .prve-btn:hover {
+				background-position : 10px -38px;
+			}
+
+			.page-box .next-btn:hover {
+				background-position : -40px -38px;
+			}
+
+			.page-box .number-text {
+				padding          : 0 10px;
+				height           : 30px;
+				</font>background-color : #fff;
+				line-height      : 30px;
+				font-size        : 14px;
+				text-align       : center;
+				border-radius    : 3px;
+				margin           : 0 3px;
+				color            : #666;
+				display          : inline-block;
+			}
+
+
+
+			.win-page-box {
+				height     : 33px;
+				border-top : solid 1px #d8e1e5;
+			}
+
+			.win-page-l {
+				float       : left;
+				height      : 33px;
+				line-height : 35px;
+				margin-left : 18px;
+			}
+
+			.win-page {
+				float        : right;
+				margin-top   : 6px;
+				margin-right : 16px;
+			}
+
+			.win-page a {
+				float : left;
+			}
+
+			.page-num {
+				width       : 20px;
+				height      : 20px;
+				text-align  : center;
+				line-height : 20px;
+				margin-left : 3px;
+				cursor      : pointer;
+			}
+
+			.page-num-cur {
+				background-color : #1f6fe2;
+				color            : white;
+				cursor           : default;
+				border-radius    : 2px;
+				border           : none
+			}
+
+			.page-arrow {
+				width      : 9px;
+				height     : 16px;
+				/* background : url(../../images/assign/page_icons.png) no-repeat; */
+				margin-top : 2px;
+			}
+
+			.page-left {
+				background-position : 0px 0px;
+				margin-right        : 12px;
+				cursor              : pointer;
+			}
+
+			.page-right {
+				background-position : -91px 0px;
+				margin-left         : 12px;
+				cursor              : pointer;
+			}
+
+			.page-left.gray {
+				background-position : -27px 0px;
+				cursor              : default;
+			}
+
+			.page-right.gray {
+				background-position : -62px 0px;
+				cursor              : default;
+			}
 		</style>
 	</head>
 	<body>
-			<div class="page-box">
-                <a href="javascript:void(0)" class="prve-btn button">&nbsp;</a>
-                <a href="javascript:void(0)" class="number-btn button num1 select" style="display: none;"></a>
-                <a href="javascript:void(0)" class="number-btn button num2" style="display: none;"></a>
-                <span class="button pre-dot" style="display: none;">...</span>
-                <a href="javascript:void(0)" class="number-btn button num3" style="display: none;"></a>
-                <a href="javascript:void(0)" class="number-btn button num4" style="display: none;"></a>
-                <a href="javascript:void(0)" class="number-btn button num5" style="display: none;"></a>
-                <span class="button suff-dot" style="display: none;">...</span>
-                <a href="javascript:void(0)" class="number-btn button num6" style="display: none;"></a>
-                <a href="javascript:void(0)" class="number-btn button num7" style="display: none;"></a>
-                <a href="javascript:void(0)" class="next-btn button">&nbsp;</a>
-            </div>
+			<div class="page-box"> </div>
 	</body>
 	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 	<script>
+	(function($,window) {
+		// 定义构造函数
 		function Paging(el,options){
 			this.el = el;
 			this.options = {
-				currentPage = options.initPageCurrent || 1;//起始页
-				totalCount = options.totalCount || 1; // 数据总数
-				pageSize = options.workListPageSize; // 每页数据
-
-				workListTotalCount: options.workListTotalCount ||0,  // 作业列表总条数
-				workListPageSize: 5,   //作业列表每页显示条数
-				workListPageCount: 0,   //作业列表总页码
-				workListPageIndex: 1,   //作业列表当前页，默认1
+				pageIndex : options.pageIndex || 1,	//起始页
+				totalCount : options.totalCount || 1,	// 数据总数
+				pageSize : options.pageSize	|| 5		// 每页数据
 			};
 			this.init();
 		}
+
+		// 实例化的属性和方法
 		Paging.prototype = {
 			constructor: Paging,
-			init:function(){
+			init: function(){
 				this.createDom();
+				this.toPage();
 				this.bindEvent();
 			},
-			createDom:function(){
-				var totalPages = this.totalPages; // 总页数
-				var
-				var pageCount = parseInt(totalPages / pageFunc.workListPageSize);
+			createDom: function(){
+				var that = this,
+					html = '',
+					pageWrap = $('.page-box');
 
-				<div class="page-box">
-					<a href="javascript:void(0)" class="prve-btn button">&nbsp;</a>
-					<a href="javascript:void(0)" class="number-btn button num1 select" style="display: none;"></a>
-					<a href="javascript:void(0)" class="number-btn button num2" style="display: none;"></a>
-					<span class="button pre-dot" style="display: none;">...</span>
-					<a href="javascript:void(0)" class="number-btn button num3" style="display: none;"></a>
-					<a href="javascript:void(0)" class="number-btn button num4" style="display: none;"></a>
-					<a href="javascript:void(0)" class="number-btn button num5" style="display: none;"></a>
-					<span class="button suff-dot" style="display: none;">...</span>
-					<a href="javascript:void(0)" class="number-btn button num6" style="display: none;"></a>
-					<a href="javascript:void(0)" class="number-btn button num7" style="display: none;"></a>
-					<a href="javascript:void(0)" class="next-btn button">&nbsp;</a>
-				</div>
+				html =
+					'<a href="javascript:void(0)" class="prve-btn button"> <&nbsp;</a>'
+					+'<a href="javascript:void(0)" class="number-btn button num1 select" style="display: none;"></a>'
+					+'<a href="javascript:void(0)" class="number-btn button num2" style="display: none;"></a>'
+					+'<span class="button pre-dot" style="display: none;">...</span>'
+					+'<a href="javascript:void(0)" class="number-btn button num3" style="display: none;"></a>'
+					+'<a href="javascript:void(0)" class="number-btn button num4" style="display: none;"></a>'
+					+'<a href="javascript:void(0)" class="number-btn button num5" style="display: none;"></a>'
+					+'<span class="button suff-dot" style="display: none;">...</span>'
+					+'<a href="javascript:void(0)" class="number-btn button num6" style="display: none;"></a>'
+					+'<a href="javascript:void(0)" class="number-btn button num7" style="display: none;"></a>'
+					+'<a href="javascript:void(0)" class="next-btn button"> >&nbsp;</a>';
+
+				pageWrap.append(html);
+			},
+
+			bindEvent: function(){
+				var that		= this,
+					numBtn		= $('.page-box .number-btn'),	// 页码按钮
+					prevBtn		= $('.page-box .prve-btn'),		// 前一页
+					nextBtn		= $('.page-box .next-btn'),		// 后一页
+					pageCount	= parseInt(that.options.totalCount / that.options.pageSize), // 总页数
+					pageIndex	= that.options.pageIndex; // 当前页
+
+
+				 //分页按钮点击
+				numBtn.unbind('click').bind('click', function () {
+					console.log(this)
+					$(this).removeClass('select');
+					pageIndex = parseInt($(this).html());
+				});
+				//前一页按钮点击
+				prevBtn.unbind('click').bind('click', function () {
+					if (pageIndex == 1) return;
+					pageIndex--;
+					that.toPage();
+					numBtn + '[data-index=' + pageIndex + ']'.addClass("select");
+					//numBtn + '[data-index=' + pageIndex + "]".trigger("click");
+				});
+
+				//后一页按钮点击
+				nextBtn.unbind('click').bind('click', function () {
+					if (pageIndex == pageCount) return;
+					pageIndex++;
+					that.toPage();
+					console.log(pageIndex)
+					console.log(numBtn)
+					$('.page-box .number-btn' + '[data-index=' + pageIndex + ']').addClass("select");
+					$('.page-box .number-btn' + '[data-index=' + pageIndex + "]").trigger("click");
+				});
+
+			},
+
+			toPage: function () {
+				var that = this,
+					el = that.el,
+					suffDot = $(".suff-dot"),
+					preDot = $(".pre-dot"),
+					numBtn	= $('.page-box .number-btn'),
+					prevBtn = $('.page-box .prve-btn'),
+					nextBtn = $('.page-box .next-btn'),
+					pageCount = parseInt(that.options.totalCount / that.options.pageSize)
+				;
+
+				el.show();
+
+				if (that.options.totalCount % that.options.pageSize > 0 ) pageCount++;
+				that.options.pageCount = pageCount;
+
+				suffDot.hide();
+				preDot.hide();
+				numBtn.hide();
+				//el.hide();
+
+				if(that.options.pageIndex == 1) prevBtn.hide();
+				else prevBtn.show();
+				if(that.options.pageIndex == pageCount) nextBtn.hide();
+				else nextBtn.show();
+
+				if(pageCount <2){
+					prevBtn.hide();
+					nextBtn.hide();
+				}else if (pageCount <= 7) {
+					for (var i = 1; i <= pageCount; i++) {
+						el.find(".num" + i).html(i).attr("data-index", i).show();
+					}
+				}else {
+					nextBtn.show();
+					$(".num1", el).html(1).attr("data-index", "1").show();
+					$(".num2", el).html(2).attr("data-index", "2").show();
+					if (that.options.pageIndex <= pageCount - 4){
+						el.show();
+						suffDot.show();
+					}
+
+					if (that.options.pageIndex <= 4) {
+						//el.hide();
+						preDot.hide();
+						$(".num3", el).html(3).attr("data-index", "3").show();
+						$(".num4", el).html(4).attr("data-index", "4").show();
+						$(".num5", el).html(5).attr("data-index", "5").show();
+					}else if (that.options.pageIndex > 4) {
+						el.show();
+						preDot.show();
+						$(".num3", el).html(that.options.pageIndex - 1).attr("data-index", that.options.pageIndex - 1).show();
+						$(".num4", el).html(that.options.pageIndex).attr("data-index", that.options.pageIndex).show();
+						$(".num5", el).html(that.options.pageIndex + 1).attr("data-index", that.options.pageIndex + 1).show();
+					}
+					if (that.options.pageIndex > pageCount - 4) {
+						//el.hide();
+						suffDot.hide();
+						$(".num3", el).html(pageCount - 4).attr("data-index", pageCount - 4).show();
+						$(".num4", el).html(pageCount - 3).attr("data-index", pageCount - 3).show();
+						$(".num5", el).html(pageCount - 2).attr("data-index", pageCount - 2).show();
+					}
+					$(".num6", el).html(pageCount - 1).attr("data-index", pageCount - 1).show();
+					$(".num7", el).html(pageCount).attr("data-index", pageCount).show();
+				}
+
+				var pb_num = el.find('a').length;
+				var ellipsis = el.find('span').length;
+				//分页按钮居中
+				el.width((pb_num + ellipsis) * 40);
+
+				numBtn.removeClass("select");
+				//numBtn + '[data-index=' + that.options.currentPage + "]".addClass("select");
+				console.log(numBtn)
+
+				;
 			}
 		}
 
-		handlePageBox: function () {
-            pageFunc.pageBox.show();
-            var pageCount = parseInt(pageFunc.workListTotalCount / pageFunc.workListPageSize);
-            if (pageFunc.workListTotalCount % pageFunc.workListPageSize > 0) pageCount++;
-            pageFunc.workListPageCount = pageCount;
-            $(".number-btn,.suff-dot,.pre-dot", pageFunc.pageBox).hide();
+		$.fn.Paging = function(options) {
+		return new Paging($(this), options);
 
-            if(pageFunc.workListPageIndex == 1)
-                $(".prve-btn").hide();
-            else
-                $(".prve-btn").show();
-            if(pageFunc.workListPageIndex == pageCount)
-                $(".next-btn").hide();
-            else
-                $(".next-btn").show();
+	}
 
-            if(pageCount <2){
-                $(".prve-btn,.next-btn").hide();
-            }
-            else if (pageCount <= 7) {
-                for (var i = 1; i <= pageCount; i++) {
-                    pageFunc.pageBox.find(".num" + i).html(i).attr("data-index", i).show();
-                }
-            }
-            else {
-                $(".num1", pageFunc.pageBox).html(1).attr("data-index", "1");
-                $(".num2", pageFunc.pageBox).html(2).attr("data-index", "2");
-                if (pageFunc.workListPageIndex <= pageCount - 4)
-                    $(".suff-dot", pageFunc.pageBox).show();
-                if (pageFunc.workListPageIndex <= 4) {
-                    $(".pre-dot", pageFunc.pageBox).hide();
-                    $(".num3", pageFunc.pageBox).html(3).attr("data-index", "3");
-                    $(".num4", pageFunc.pageBox).html(4).attr("data-index", "4");
-                    $(".num5", pageFunc.pageBox).html(5).attr("data-index", "5");
-                }
-                else if (pageFunc.workListPageIndex > 4) {
-                    $(".pre-dot", pageFunc.pageBox).show();
-                    $(".num3", pageFunc.pageBox).html(pageFunc.workListPageIndex - 1).attr("data-index", pageFunc.workListPageIndex - 1);
-                    $(".num4", pageFunc.pageBox).html(pageFunc.workListPageIndex).attr("data-index", pageFunc.workListPageIndex);
-                    $(".num5", pageFunc.pageBox).html(pageFunc.workListPageIndex + 1).attr("data-index", pageFunc.workListPageIndex + 1);
-                }
-                if (pageFunc.workListPageIndex > pageCount - 4) {
-                    $(".suff-dot", pageFunc.pageBox).hide();
-                    $(".num3", pageFunc.pageBox).html(pageCount - 4).attr("data-index", pageCount - 4);
-                    $(".num4", pageFunc.pageBox).html(pageCount - 3).attr("data-index", pageCount - 3);
-                    $(".num5", pageFunc.pageBox).html(pageCount - 2).attr("data-index", pageCount - 2);
-                }
-                $(".num6", pageFunc.pageBox).html(pageCount - 1).attr("data-index", pageCount - 1);
-                $(".num7", pageFunc.pageBox).html(pageCount).attr("data-index", pageCount);
-                $(".number-btn", pageFunc.pageBox).show();
-            }
-            //分页按钮居中
-            var pb_num = $('.page-box a').length;
-            var ellipsis = $('.page-box span').length;
-            $('.page-box').width((pb_num + ellipsis) * 40);
+	})(jQuery,window);
 
-            $(".page-box .number-btn").removeClass("select");
-            $(".page-box .number-btn[data-index='" + pageFunc.workListPageIndex + "']").addClass("select");
-            pageFunc.pageBox.show();
 
-            //分页按钮点击
-            $('.page-box .number-btn').unbind('click').bind('click', function () {
-                $('.page-box .number-btn').removeClass('select');
-                pageFunc.workListPageIndex = parseInt($(this).html());
-                pageFunc.getSendList();
-            });
-
-            //前一页按钮点击
-            $('.page-box .prve-btn').unbind('click').bind('click', function () {
-                if (pageFunc.workListPageIndex == 1) return;
-                pageFunc.workListPageIndex--;
-                pageFunc.handlePageBox();
-                $(".page-box .number-btn[data-index='" + pageFunc.workListPageIndex + "']").trigger("click");
-            });
-
-            //前一页按钮点击
-            $('.page-box .next-btn').unbind('click').bind('click', function () {
-                if (pageFunc.workListPageIndex == pageFunc.workListPageCount) return;
-                pageFunc.workListPageIndex++;
-                pageFunc.handlePageBox();
-                $(".page-box .number-btn[data-index='" + pageFunc.workListPageIndex + "']").trigger("click");
-            });
-        }
-		handlePageBox();
-	</script>
-
-	<script>
-		(function($, window, document) {
-			// 定义构造函数
-			function Paging(el, options) {
-				this.el = el;
-				this.options = {
-					pageNo : options.initPageNo || 1, // 初始页码
-					totalPages : options.totalPages || 1, // 总页数
-					totalCount : options.totalCount || '', // 条目总数
-
-				};
-				this.init();
-			}
-			// 给实例对象添加公共属性和方法
-			Paging.prototype = {
-				constructor : Paging,
-				init : function() {
-					this.createDom();
-					this.bindEvents();
-				},
-				createDom : function() {
-					var ulDom = '',  content = '',
-					totalPages = that.options.totalPages, // 总页数
-					totalPages > 5 ? wrapLength = 5 * liWidth :totalPages * liWidth;
-					for (var i = 1; i <= that.options.totalPages; i++) {
-						i != 1 ? ulDom += '<li>' + i + '</li>'
-								: ulDom += '<li class="sel-page">' + i + '</li>';
-					}
-					that.options.jump ? jumpDom = '<input type="text" placeholder="1" class="jump-text" id="jumpText"><button type="button" class="jump-button" id="jumpBtn">跳转</button>'
-							: jumpDom = '';
-					content = '<button type="button" id="firstPage" class="turnPage first-page">首页</button>'
-							+ '<button class="turnPage" id="prePage">上一页</button>'
-							+ '<div class="pageWrap" style="width:'
-							+ wrapLength
-							+ 'px">'
-							+ '<ul id="pageSelect" style="transition:all '
-							+ that.options.slideSpeed
-							+ 'ms">'
-							+ ulDom
-							+ '</ul></div>'
-							+ '<button class="turnPage" id="nextPage">下一页</button>'
-							+ '<button type="button" id="lastPage" class="last-page">尾页</button>'
-							+ jumpDom
-							+ '<p class="total-pages">共&nbsp;'
-							+ that.options.totalPages
-							+ '&nbsp;页</p>'
-							+ '<p class="total-count">'
-							+ that.options.totalCount
-							+ '</p>';
-					that.el.html(content);
-				},
-				bindEvents : function() {
-					var that = this, pageSelect = $('#pageSelect'), // ul
-					lis = pageSelect.children(), // li的集合
-					liWidth = lis[0].offsetWidth, // li的宽度
-					totalPages = that.options.totalPages, // 总页数
-					pageIndex = that.options.pageNo, // 当前选择的页码
-					distance = 0, // ul移动距离
-					prePage = $('#prePage'), nextPage = $('#nextPage'), firstPage = $('#firstPage'), lastPage = $('#lastPage'), jumpBtn = $('#jumpBtn'), jumpText = $('#jumpText');
-
-					prePage.on('click', function() {
-						pageIndex--;
-						if (pageIndex < 1)
-							pageIndex = 1;
-						handles(pageIndex);
-					})
-
-					nextPage.on('click', function() {
-						pageIndex++;
-						if (pageIndex > lis.length)
-							pageIndex = lis.length;
-						handles(pageIndex);
-					})
-
-					firstPage.on('click', function() {
-						pageIndex = 1;
-						handles(pageIndex);
-					})
-
-					lastPage.on('click', function() {
-						pageIndex = totalPages;
-						handles(pageIndex);
-					})
-
-					jumpBtn.on('click', function() {
-						var jumpNum = parseInt(jumpText.val().replace(/\D/g, ''));
-						if (jumpNum && jumpNum >= 1 && jumpNum <= totalPages) {
-							pageIndex = jumpNum;
-							handles(pageIndex);
-							jumpText.val(jumpNum);
-						}
-					})
-
-					lis.on('click', function() {
-						pageIndex = $(this).index() + 1;
-						handles(pageIndex);
-					})
-
-					function handles(pageIndex) {
-						/*
-						 * =========== 在需要分页的页面写对应的js代码 ================
-						 */
-						JumpToPage(pageIndex);
-						/*
-						 * =========== 在需要分页的页面写对应的js代码 ================
-						 */
-
-						lis.removeClass('sel-page').eq(pageIndex - 1).addClass(
-								'sel-page');
-						if (totalPages <= 5) {
-							that.options.callback(pageIndex);
-							return false;
-						}
-						if (pageIndex >= 3 && pageIndex <= totalPages - 2)
-							distance = (pageIndex - 3) * liWidth;
-						if (pageIndex == 2 || pageIndex == 1)
-							distance = 0;
-						if (pageIndex > totalPages - 2)
-							distance = (totalPages - 5) * liWidth;
-
-						pageSelect
-								.css('transform', 'translateX(' + (-distance) + 'px)');
-						pageIndex == 1 ? firstPage.attr('disabled', true) : firstPage
-								.attr('disabled', false);
-						pageIndex == 1 ? prePage.attr('disabled', true) : prePage.attr(
-								'disabled', false);
-						pageIndex == totalPages ? lastPage.attr('disabled', true)
-								: lastPage.attr('disabled', false);
-						pageIndex == totalPages ? nextPage.attr('disabled', true)
-								: nextPage.attr('disabled', false);
-						that.options.callback(pageIndex);
-					}
-					;
-				}
-			}
-			$.fn.paging = function(options) {
-				return new Paging($(this), options);
-			}
-		})(jQuery, window, document);
+		$('.page-box').Paging({
+			pageIndex: 1, // 初始页码
+			totalCount:200,  // 总条数
+			pageSize:5       // 每页条数
+		});
 
 
 	</script>

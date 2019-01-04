@@ -24,12 +24,12 @@
 				ulDom = '',
 				jumpDom = '',
 				content = '',
-				liWidth = 60,							
+				liWidth = 60,
 				totalPages = that.options.totalPages,	// 总页数
 				wrapLength = 0;
 
 
-			totalPages > 6 
+			totalPages > 6
 				? wrapLength = 6 * liWidth 
 				: wrapLength = totalPages-1 * liWidth;
 
@@ -56,10 +56,7 @@
 					+ jumpDom
 					+ '<p class="total-pages">共&nbsp;'
 					+ that.options.totalPages
-					+ '&nbsp;页</p>'
-					+ '<p class="total-count">'
-					+ that.options.totalCount
-					+ '</p>';
+					+ '&nbsp;页</p>';
 			that.el.html(content);
 		},
 		bindEvents : function() {
@@ -135,18 +132,19 @@
  
 				lis.removeClass('sel-page').eq(pageIndex - 1).addClass(
 						'sel-page');
-				if (totalPages <= 5) {
+				if (totalPages <= 9) {
 					that.options.callback(pageIndex);
 					return false;
 				}
-				if (pageIndex >= 5 && pageIndex <= totalPages - 4)
+				if (pageIndex >= 6 && pageIndex <= totalPages - 4)
 					distance = (pageIndex - 5) * liWidth;
 
 				if (pageIndex == 1 || pageIndex == 2)
 					distance = 0;
+                if (pageIndex == totalPages)
+                    distance = (pageIndex - 9) * liWidth;
 				
-				pageSelect
-						.css('transform', 'translateX(' + (-distance) + 'px)');
+				pageSelect.css('transform', 'translateX(' + (-distance) + 'px)');
 
 				pageIndex == 1 
 					? firstPage.attr('disabled', true) 
