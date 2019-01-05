@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <meta name="Keywords" content="">
+        <meta name="Description" content="">
+    </head>
+    <body>
+        <input type="text" id="son">
+        <button id="sonBtn">确定</button>
+    </body>
+</html>
+<script type="text/javascript" src="http://www.zymseo.com/js/demo.js"></script>
+<script type="text/javascript">
+    $("#sonBtn").click(function(){
+        var $val = $("#son").val();
+        $("#parent", window.parent.document).val($val);//jQuery写法给父页面传值大笑
+        //window.parent.document.getElementById("parent").setAttribute("value",$val);//原生javascript写法给父页面传值
+        $(".clear", window.parent.document).hide();//jQuery写法控制父页面中的某个元素隐藏
+        //window.parent.document.getElementsByClassName("clear")[0].style.display = "none";//原生javascript写法控制父页面中的某个元素隐藏
+    })
+</script>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <meta name="Keywords" content="">
+        <meta name="Description" content="">
+    </head>
+    <body style="height:3000px">
+        <input type="text" id="parent">
+        <button id="parentBtn">编辑</button>
+        <div class="clear" style="width:500px;height:200px;border:1px solid red;position:fixed;top:100px;left:100px;display:none">
+            <iframe src="son.html" style="border:none"></iframe>
+        </div>
+        <button id="content">获取内容值</button>
+    </body>
+</html>
+<script type="text/javascript" src="http://www.zymseo.com/js/demo.js"></script>
+<script type="text/javascript">
+    $("#parentBtn").click(function(){
+        $(".clear").show();
+    })
+    $("#content").click(function(){
+        alert($("#parent").val());
+    })
+</script>
