@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>截屏插件</title>
+    <link rel="stylesheet" href="demo.css">
+
+</head>
+<body>
+    <div id="canvasContainer"></div>
+	 <button class="he">自定义截屏按钮</button>
+    <button id="cancel">自定义取消截屏按钮</button>
+</body>
+<script src="jquery-1.9.1.min.js"></script>
+<script src="demo.js"></script>
+
+<script>
+    var options = {
+        urlList                 : "demo.png",				// {String || Array} 单张图片url字符串,或者多张图片数组, 默认为 "demo.png"
+        width                   : 500,                      // {Number}          canvas宽度,默认为 500
+        height                  : 300,                      // {Number}          canvas高度,默认为 300
+        isShowResult            : true,                     // {Boolean}         是否显示截图结果,默认为 true
+        isShowPageBox           : true,                     // {Boolean}         是否显示前一张图,后一张图,默认为 true
+        isShowBtn               : true,                     // {Boolean}         是否显示默认的截图,取消截图按钮,默认为true
+        selfPhotoBtn            : ".he",                    // {String}          自定义截屏按钮,(例如class名或id名)
+        selfCancelBtn           : "#cancel",                // {String}          自定义取消截屏按钮,string类型(例如class名或id名)
+        callback                : null,                     // {function}        回调方法,默认为 null,
+        saveImg                 : null,                     // {function}        回调方法,默认为 null,传入保存路径函数即可(默认参数base64)
+    }
+
+    $('#canvasContainer').GetImage(options);
+</script>
+</html>

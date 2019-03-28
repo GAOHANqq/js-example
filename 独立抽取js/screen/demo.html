@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<link rel="stylesheet" href="css/demo.css" />
+		<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="./js/demo.js"></script>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+			body{
+				width:800px;
+				height:400px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="box" width="300px" height="400px"></div>
+		<button class="he" style="margin-left:300px;margin-top:50px;">自定义截屏按钮</button>
+		<button id="cancel">自定义取消截屏按钮</button>
+	</body>
+	<script>
+		  var options = {
+	        urlList                 : "./img/demo.png",   // {String || Array} 单张图片url字符串,或者多张图片数组, 默认为 "demo.png"
+	        width                   : 500,                      // {Number}          canvas宽度,默认为 500
+	        height                  : 300,                      // {Number}          canvas高度,默认为 300
+	        isShowResult            : false,                     // {Boolean}         是否显示截图结果,默认为 true
+	        isShowPageBox           : true,                     // {Boolean}         是否显示前一张图,后一张图,默认为 true
+	        isShowBtn               : true,                     // {Boolean}         是否显示默认的截图,取消截图按钮,默认为true
+	        selfPhotoBtn            : ".he",                    // {String}          自定义截屏按钮,(例如class名或id名)
+	        selfCancelBtn           : "#cancel",                // {String}          自定义取消截屏按钮,string类型(例如class名或id名)
+	        callback                : null,                     // {function}        回调方法,默认为 null,
+	        saveImg                 : null,                     // {function}        回调方法,默认为 null,传入保存路径函数即可(默认参数base64)
+	    }
+
+	    $('#box').GetImage(options);
+	</script>
+</html>

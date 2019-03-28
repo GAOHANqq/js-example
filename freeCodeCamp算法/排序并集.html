@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+
+		</style>
+	</head>
+	<body>
+
+	</body>
+	<script>
+		function unite(arr1, arr2, arr3) {
+		  newArr = Array.prototype.reduce.call(arguments,function(acc,cur){
+			return Array.prototype.concat(acc,cur);
+		  });
+		  var arr = [];
+		  newArr.filter(function(val){
+			if(arr.indexOf(val) === -1){
+			  arr.push(val);
+			}
+			return true;
+		  });
+		  return arr;
+		}
+
+
+		unite([1, 3, 2], [5, 2, 1, 4], [2, 1]);
+
+		/*function unite(arr1, arr2, arr3) {
+		  var arr=[];
+		  arr1 = Array.prototype.reduce.call(arguments,function(acc,cur){
+			return Array.prototype.concat(acc,cur);
+		  });
+		  arr1.filter(function(val){
+			if(arr.indexOf(val) === -1){
+			  arr.push(val);
+			}
+			return true;
+		  });
+		  return arr;
+		}
+
+		unite([1, 3, 2], [5, 2, 1, 4], [2, 1]);*/
+
+
+	</script>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>小书书</title>
+        <meta name="keywords" content="关键词">
+        <meta name="description" content="描述">
+        <meta name="author" content="小书书">
+        <link rel="stylesheet" href="demo.css">
+        <script src="jquery.js"></script>
+        <script src="demo.js"></script>
+        <style>
+            body{font-family: "Microsoft YaHei",serif;user-select: none;}
+            body,dl,dd,p,h1,h2,h3,h4,h5,h6{margin:0;}
+            ol,ul,li{margin:0;padding:0;list-style:none;}
+            img{border:none;}
+        
+        </style>
+    </head>
+    <body>
+        <div class="page-box"></div>
+        
+        <script>
+            var options = {
+                pageIndex: 1,	        // 当前页
+                limit: 5,               // 每页显示数量
+                totalCount: 40,         // 数据总条数
+                callback: function(){console.log(1);}     //页码修改后的回调函数
+            };
+            $(".page-box").Page(options);
+
+        </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

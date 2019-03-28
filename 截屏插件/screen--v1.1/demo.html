@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<link rel="stylesheet" href="css/demo.css" />
+		<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="./js/demo.js"></script>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+			body{
+				width:800px;
+				height:400px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box" width="300px" height="400px"></div>
+			<button class="he">自定义截屏按钮</button>
+			<button id="cancel">自定义取消截屏按钮</button>
+	</body>
+	<script>
+		  var options = {
+	        urlList                 : "img/demo.png",   // {String || Array} 单张图片url字符串,或者多张图片数组, 默认为 "demo.png"
+	        width                   : 500,                      // {Number}          canvas宽度,默认为 500
+	        height                  : 300,                      // {Number}          canvas高度,默认为 300
+	    }
+
+	    $('#box').ImageCuter(options);
+	</script>
+
+	</script>
+</html>

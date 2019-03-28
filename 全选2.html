@@ -26,10 +26,11 @@
 		display:inline-block;
 		cursor:pointer;
 	}
-  
+
   </style>
  </head>
  <body>
+
 	<div class="wrap">
 		<div class="list">
 			<!-- <input type="checkbox" id="input1" /><label for="input1">数学</label>
@@ -44,8 +45,8 @@
 			<input type="checkbox" id="all"/><label for="all">全选</label>
 			<p id="reAll">反选</p>
 		</div>
-		
-	</div>		
+
+	</div>
  </body>
  <script>
 	(function(data){
@@ -58,7 +59,7 @@
 		var num = 0;
 				//JS生成DOM结构
 				(function(){
-					
+
 					var html = "";
 					for(var i=0;i<len;i++){
 						(function(i){
@@ -85,10 +86,10 @@
 				(function(){
 					//全选
 					oBtn.onclick = function(){
-					
+
 						var x = oBtn.checked;//全选按钮
 						var bool = x === true?true:false;
-						
+
 						for(var i=0;i<len;i++){
 							(function(i){
 								aInput[i].checked = bool;
@@ -109,23 +110,23 @@
 
 						num = len - num;
 						numIsLen();
-						
+
 					}
-				
+
 				})();
-				
+
 				//单个的点击与全选按钮的关联
 				(function(){
 					for(var i=0;i<len;i++){
 						aInput[i].onclick = function(){
 							this.checked === true?num++:num--;
 							numIsLen();
-							
+
 						}
-						
+
 					}
 				})();
-		
+
 		})(	//模拟后台数据
 			[
 				{

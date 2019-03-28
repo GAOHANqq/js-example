@@ -1,0 +1,122 @@
+body{
+    margin:0;
+    padding: 0;
+    -webkit-user-select: none;
+}
+p{
+    user-select: none;
+}
+a{
+    text-decoration: none;
+    color: #222;
+}
+canvas {
+    border: solid thin #ccc;
+    cursor: pointer;
+}
+
+#canvasContainer {
+    position: relative;
+}
+
+#picker {
+    position: absolute;
+    border: 1px dashed #ccc;
+    cursor: move;
+    z-index: 2;
+}
+
+.resize {
+    position: absolute;
+    background: #FFF;
+    border: 1px solid #333;
+    width: 6px;
+    height: 6px;
+    z-index: 500;
+    font-size: 0;
+    opacity: 0.5;
+}
+
+.left-top {
+    left: -4px;
+    top: -4px;
+    cursor: se-resize;
+}
+
+.left-bottom {
+    left: -4px;
+    bottom: -4px;
+    cursor: ne-resize;
+}
+
+.right-top {
+    right: -4px;
+    top: -4px;
+    cursor: ne-resize;
+}
+
+.right-bottom {
+    cursor: se-resize;
+    right: -4px;
+    bottom: -4px;
+}
+
+.btn{
+    margin-left: 100px;
+}
+.btn input{
+    cursor: pointer;
+}
+.pageBox{
+    padding: 5px;
+    margin: 0 5px;
+    background-color: #ccc;
+    cursor: pointer;
+}
+.cut-info{
+    width: 280px;
+    height: 30px;
+    position: absolute;
+    bottom: -35px;
+    right: 0;
+    font-size: 16px;
+    line-height: 30px;
+    text-indent: 15px;
+    background: rgba(255,255,255,1);
+    border-radius: 2px;
+    color:rgba(78,86,104,1);
+}
+.pic-btn{
+    float: right;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.pic-save{
+    background: url("../../images/assign/cut_choose.png") no-repeat 0 5px;
+}
+.pic-cancel{
+    margin-right: 10px;
+    background: url("../../images/assign/cut_cancel.png") no-repeat 0 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

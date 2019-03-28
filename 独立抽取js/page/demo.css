@@ -1,0 +1,76 @@
+.page-box .button {
+    width            : 30px;
+    height           : 30px;
+    background-color : #fff;
+    line-height      : 30px;
+    font-size        : 14px;
+    text-align       : center;
+    text-decoration  : none;
+    border-radius    : 3px;
+    margin           : 0 3px;
+    color            : #666;
+    display          : inline-block;
+}
+
+.page-box a:hover, .page-box .select {
+    background-color : #3e73f6;
+    color            : #fff;
+}
+
+.page-box .prve-btn, .page-box .next-btn {
+    background : url('./img/page_op_btn.png') #fff no-repeat;
+}
+
+.page-box .prve-btn {
+    background-position : 10px 8px;
+}
+
+.page-box .next-btn {
+    background-position : -40px 8px;
+}
+
+.page-box .prve-btn:hover {
+    background-position : 10px -38px;
+}
+
+.page-box .next-btn:hover {
+    background-position : -40px -38px;
+}
+
+.page-box .number-text {
+    padding          : 0 10px;
+    height           : 30px;
+    background-color : #fff;
+    line-height      : 30px;
+    font-size        : 14px;
+    text-align       : center;
+    border-radius    : 3px;
+    margin           : 0 3px;
+    color            : #666;
+    display          : inline-block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

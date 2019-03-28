@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+
+		</style>
+	</head>
+	<body>
+
+	</body>
+
+	<script>
+		var arr = [1,2,3,4,3,2,6,1];
+
+		function fn(){
+			var newArr = [];
+			for(var i=0;i<arr.length;i++){
+				var item = arr[i];
+				if( newArr[item] ){
+					arr.splice(i,1);
+					i --;
+				}else{
+					newArr[item] = true;
+				}
+			}
+			return arr;
+		}
+
+		console.log(fn(arr));
+	</script>
+</html>

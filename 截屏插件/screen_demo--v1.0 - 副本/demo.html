@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>截屏插件</title>
+    <link rel="stylesheet" href="demo.css">
+
+</head>
+<body>
+    <div id="canvasContainer"></div>
+	 <button class="he">自定义截屏按钮</button>
+    <button id="cancel">自定义取消截屏按钮</button>
+</body>
+<script src="jquery-1.9.1.min.js"></script>
+<script src="demo.js"></script>
+
+<script>
+
+    var options = {
+        url						: "demo.png",				// {String} 单张图片url字符串 默认为 "demo.png"
+        width                   : 500,                      // {Number}          canvas宽度,默认为 500
+        height                  : 300,                      // {Number}          canvas高度,默认为 300
+        saveImg                 : null,
+    }
+
+    var btn = $('#canvasContainer').ImageCuter(options);
+
+	$('.he').click(function(){
+		btn.cuterImage();
+	});
+
+	$('#cancel').click(function(){
+		btn.cancelCuterImage();
+	});
+
+</script>
+</html>

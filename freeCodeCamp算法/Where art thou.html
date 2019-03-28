@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+
+		</style>
+	</head>
+	<body>
+
+	</body>
+	<script>
+	function where(collection, source) {
+		var arr = [];
+		var keys = Object.keys(source);
+		console.log(keys)
+		arr = collection.filter(function(item){
+			for(var i = 0; i < keys.length; i++){
+				if(!item.hasOwnProperty(keys[i]) || item[keys[i]] !== source[keys[i]]){
+				return false;}
+			}
+			return true;
+		});
+		return arr;
+	}
+
+	where(
+		[
+			{
+				first: "Romeo",
+				last: "Montague"
+			},
+			{
+				first: "Mercutio",
+				last: null
+			},
+			{	first: "Tybalt",
+				last: "Capulet"
+			}
+		],
+		{
+			last: "Capulet"
+		}
+	);
+
+	</script>
+</html>
