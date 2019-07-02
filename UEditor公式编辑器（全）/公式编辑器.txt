@@ -1,0 +1,26 @@
+mathquill：及相关图片公式生成网站
+
+mathquill demo: http://mathquill.com/demo.html
+该demo 具体列子 mathquill code 转换为可视化 html，在由 html 转换为 mathquill code 有时间可以看下
+
+mathquill 下载地址
+https://github.com/mathquill/mathquill
+
+mathquill 编码转换img 地址
+http://latex.codecogs.com/gif.latex?\frac{d}{dx}\sqrt{x}=
+
+http://mathquill.com
+
+
+
+也有部分公式转换 html 不支持（文件路径：\editor\dialogs\equation\js\markitup.js ） 比如：
+{ name: '矢量(右)', replaceWith: '{/}overrightarrow{ab} ' },
+{ name: '矢量(左)', replaceWith: '{/}overleftarrow{ab} ' },
+{ name: '矢量', replaceWith: '{/}widehat{ab} ' },
+{ name: '矩阵', replaceWith: '{/}begin{bmatrix}a & b {/}{/}c & d {/}end{bmatrix} ' },
+{ name: '方程组', replaceWith: '{/}begin{cases} {a} {/}{/} {b} {/}end{cases} ' },
+{ name: '化学反应方程式', replaceWith: '{/}mathop{={/}!={/}!=}^{a}_{b} ' },
+{ name: '极限', replaceWith: '{/}lim_{n {/}to {/}infty} ' },
+
+
+
