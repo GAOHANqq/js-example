@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="Generator" content="EditPlus®"/>
+		<meta name="Author" content=""/>
+		<meta name="Keywords" content=""/>
+		<meta name="Description" content=""/>
+		<title>Document</title>
+		<style type="text/css">
+			body,p,ul,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+			ul,ol{list-style:none;}
+			img{display:block;border:0;}
+			a{text-decoration:none;color:#222;}
+
+			body{
+				background-color: #446ae6;
+			}
+		</style>
+	</head>
+	<body>
+
+	</body>
+	<script>
+        function drawRing(opts) {
+            let _opts = {
+                parent: document.body,
+                width: 200,
+                radius: 45,
+                arc: 5,
+                perent: 100,
+                textColor: '#000',
+                textSize: '14px',
+                animated: false,
+                after: function() {}
+            }, k;
+            for (k in opts){
+                _opts[k] = opts[k];
+            }
+
+            let parent = _opts.parent,
+                width = _opts.width,
+                radius = _opts.radius,
+                arc = _opts.arc,
+                perent = parseFloat(_opts.perent),
+                textSize = _opts.textSize,
+                textColor = _opts.textColor,
+                c = document.createElement('canvas'),
+                ctx = null,
+                x = 0,
+                animated = _opts.animated,
+                after = _opts.after;
+
+            parent.appendChild(c);
+            ctx = c.getContext("2d");
+            ctx.canvas.width = width;
+            ctx.canvas.height = width;
+
+            function clearFill() {
+                ctx.clearRect(0, 0, width, width);
+            }
+
+            function fillBG() {
+                ctx.fillStyle = '#446ae6';
+                ctx.beginPath();
+                ctx.arc(width / 2,width / 2,radius, 0, 2* Math.PI);
+                ctx.fill();
+				let w = 100, h = 50, border = 25, x = width/2-h, y = width-80;
+                roundedRect(x,y,w,h,border,width/2,y+h/2)
+                fillLine(false)
+            }
+
+            function roundedRect(x, y, width, height, radius,textX,textY) {
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#fff";
+                ctx.beginPath();
+                ctx.moveTo(x, y + radius);
+                ctx.lineTo(x, y + height - radius);
+                ctx.quadraticCurveTo(x, y + height, x + radius, y + height);
+                ctx.lineTo(x + width - radius, y + height);
+                ctx.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+                ctx.lineTo(x + width, y + radius);
+                ctx.quadraticCurveTo(x + width, y, x + width - radius, y);
+                ctx.lineTo(x + radius, y);
+                ctx.quadraticCurveTo(x, y, x, y + radius);
+                ctx.stroke();
+                ctx.fillStyle='#446ae6';
+                ctx.fill();
+                ctx.font = '11px Arial';
+                ctx.fillStyle = textColor;
+                ctx.textBaseline = "middle";
+                ctx.textAlign = 'center';
+                ctx.fillText('作业得分',textX,textY);
+
+            }
+
+            function fillArc(x) {
+                ctx.beginPath();
+                ctx.lineWidth = arc;
+                ctx.strokeStyle = '#fff';
+                ctx.arc(width / 2,width / 2, radius, 0.75* Math.PI,(x*2.7-225)*Math.PI/180);
+                ctx.stroke();
+            }
+
+            function fillText(x) {
+                ctx.font = textSize + ' Arial';
+                ctx.fillStyle = textColor;
+                ctx.textBaseline = "middle";
+                ctx.textAlign = 'center';
+                ctx.fillText(x.toFixed(1), width / 2, width / 2);
+            }
+            function fillLine(isStart,progree){
+                for(let i=0,length = isStart?progree:100;i<length;i++){
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = isStart?'#fff':'#999';
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2,width / 2);
+                    ctx.arc(width / 2,width / 2,radius,.75*Math.PI,((i+1)*2.7-225)*Math.PI/180);
+                    ctx.closePath();
+                    ctx.stroke();
+                }
+                ctx.fillStyle = '#446ae6';
+                ctx.beginPath();
+                ctx.arc(width / 2,width / 2,radius-45, .75*Math.PI, .25* Math.PI);
+                ctx.fill();
+                ctx.lineWidth = 15;
+                ctx.strokeStyle = '#446ae6';
+                ctx.arc(width / 2, width / 2, radius-8, .75*Math.PI, .25* Math.PI);
+                ctx.closePath();
+                ctx.stroke();
+            }
+            function fill(x) {
+                clearFill();
+                fillBG();
+				fillLine(true,x);
+				//fillArc(x);
+				fillText(x);
+            }
+
+            if (!animated)
+                return fill(perent);
+            !function animate() {
+                if (++x > perent) return
+                after && after();
+                setTimeout(animate, 10);
+                fill(x);
+            }();
+        }
+
+        document.addEventListener('DOMContentLoaded',function(){
+            drawRing({
+                animated: true,
+                width: 520,
+                radius: 250,
+                arc:10,
+                perent: 80,
+                textColor: '#fff',
+                textSize: '40px',
+                after: function(){
+                    console.timeEnd('用时');
+                }
+            });
+        }, false);
+	</script>
+</html>
